@@ -3,9 +3,7 @@ using System;
 
 public class TileMap : Godot.TileMap
 {
-	// Declare member variables here. Examples:
-	// private int a = 2;
-	// private string b = "text";
+	private int xDiff = 10; // difference  between x size and x custom transform
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -13,9 +11,49 @@ public class TileMap : Godot.TileMap
 		
 	}
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+	public override void _Process(float delta)
+	{
+	   GetParent().GetNode("Camera2D").GetNode("UI").GetNode<Label>("Position").Text = "" + GetMousePosition();
+	}
+
+	// https://www.redblobgames.com/grids/hexagons/
+	//function axial_to_oddq(hex):
+		//var col = hex.q
+		//var row = hex.r + (hex.q - (hex.q&1)) / 2
+		//return OffsetCoord(col, row)
+
+	//function oddq_to_axial(hex):
+		//var q = hex.col
+		//var r = hex.row - (hex.col - (hex.col&1)) / 2
+		//return Hex(q, r)
+
+	public override void _Input(InputEvent inputEvent) {
+		if (inputEvent.IsActionPressed("ui_accept")) {
+			GetMousePosition();
+			//GD.Print(GetMousePosition());
+		}
+	}
+	
+	public Vector2 GetMousePosition() {
+		var mousePos = GetLocalMousePosition();
+		//GD.Print("mousePos " + mousePos);
+		
+		var squareY = (mousePos.y-xDiff)/32;
+		var squareX = mousePos.x/28;
+		//GD.Print("squareX " + squareX);
+		//GD.Print("squareY " + squareY);
+		//GD.Print("col odd/even " + Math.Floor(squareX%2));
+		
+		if (Math.Floor(squareX%2) == 0) {
+			mousePos.y = mousePos.y - (CellSize.y+xDiff)/2;
+		} else {
+			mousePos.y = mousePos.y - CellSize.y+xDiff;
+		}
+		
+		mousePos.x = mousePos.x + CellSize.x/4; // This is innacurate
+		
+		//GD.Print("mousePos after" + mousePos);
+		//GD.Print();
+		return this.WorldToMap(mousePos);
+	}
 }
