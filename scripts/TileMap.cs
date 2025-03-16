@@ -13,7 +13,10 @@ public class TileMap : Godot.TileMap
 
 	public override void _Process(float delta)
 	{
-	   GetParent().GetNode("Camera2D").GetNode("UI").GetNode<Label>("Position").Text = "" + GetMousePosition();
+		var pos = GetMousePosition();
+		GetParent().GetParent().GetNode("UI")
+			.GetNode<Label>("Position").Text = 
+				"" + pos + " " + GetCellAutotileCoord((int) pos.x, (int) pos.y);
 	}
 
 	// https://www.redblobgames.com/grids/hexagons/
@@ -27,19 +30,12 @@ public class TileMap : Godot.TileMap
 		//var r = hex.row - (hex.col - (hex.col&1)) / 2
 		//return Hex(q, r)
 
-	public override void _Input(InputEvent inputEvent) {
-		if (inputEvent.IsActionPressed("ui_accept")) {
-			GetMousePosition();
-			//GD.Print(GetMousePosition());
-		}
-	}
-	
 	public Vector2 GetMousePosition() {
 		var mousePos = GetLocalMousePosition();
 		//GD.Print("mousePos " + mousePos);
 		
-		var squareY = (mousePos.y-xDiff)/32;
-		var squareX = mousePos.x/28;
+		var squareY = (mousePos.y-xDiff)/CellSize.x;
+		var squareX = mousePos.x/CellSize.y;
 		//GD.Print("squareX " + squareX);
 		//GD.Print("squareY " + squareY);
 		//GD.Print("col odd/even " + Math.Floor(squareX%2));
