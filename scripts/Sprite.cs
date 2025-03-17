@@ -8,16 +8,11 @@ public class Sprite : Godot.Sprite
 	public Tile curTile;
 	public RandomNumberGenerator rng = new RandomNumberGenerator();
 	
-	// Tile Scenes
-	private static PackedScene grassScene = GD.Load<PackedScene>("res://scenes/tiles/Grass.tscn");
-	private static PackedScene dirtScene = GD.Load<PackedScene>("res://scenes/tiles/Dirt.tscn");
-	private static PackedScene waterScene = GD.Load<PackedScene>("res://scenes/tiles/Water.tscn");
-	
 	// Tile collection array
-	private PackedScene[] tiles = {
-		grassScene,
-		dirtScene,
-		waterScene
+	private Vector2[] tiles = {
+		new Vector2(0,0),
+		new Vector2(0,3),
+		new Vector2(6,0)
 	};
 	
 	// Bag of tiles
@@ -68,11 +63,12 @@ public class Sprite : Godot.Sprite
 	// Gets next tile from bag
 	public void GetNextTile() {
 		int random = rng.RandiRange(0, bag.Count-1);
-		PackedScene tileScene = tiles[(int) bag[random]];
+		Vector2 tileAtlas = tiles[(int) bag[random]];
 		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<Control>("CurrentTileTexture");
 		foreach (Node i in CurrentTileTextureControl.GetChildren()) {
 			i.QueueFree();
 		}
+		var tileScene = TileHandler.GetTileScene(tileAtlas);
 		Tile tile = (Tile) tileScene.Instance();
 		CurrentTileTextureControl.AddChild(tile);
 		curTile = tile;

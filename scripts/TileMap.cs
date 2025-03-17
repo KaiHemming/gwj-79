@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class TileMap : Godot.TileMap
 {
@@ -57,33 +58,44 @@ public class TileMap : Godot.TileMap
 	}
 	// Places a tile at pos
 	public void PlaceTile(Vector2 pos, Tile tile) {
-		SetCellv(pos, 0, false, false, false, tile.GetAtlasCoord());
-		UpdateNeighbour(pos.x, pos.y+1, tile);
-		UpdateNeighbour(pos.x, pos.y-1, tile);
+		HashSet<Vector2> potentialPlacements = new HashSet<Vector2>();
+		potentialPlacements.Add(UpdateNeighbour(pos.x, pos.y+1, tile));
+		potentialPlacements.Add(UpdateNeighbour(pos.x, pos.y-1, tile));
 		
 		if (pos.x%2 == 0) {
-			UpdateNeighbour(pos.x-1, pos.y-1, tile);
-			UpdateNeighbour(pos.x-1, pos.y, tile);
-			UpdateNeighbour(pos.x+1, pos.y-1, tile);
-			UpdateNeighbour(pos.x+1, pos.y, tile);
+			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y-1, tile));
+			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y, tile));
+			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y-1, tile));
+			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y, tile));
 		} else {
-			UpdateNeighbour(pos.x-1, pos.y+1, tile);
-			UpdateNeighbour(pos.x-1, pos.y, tile);
-			UpdateNeighbour(pos.x+1, pos.y+1, tile);
-			UpdateNeighbour(pos.x+1, pos.y, tile);
+			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y+1, tile));
+			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y, tile));
+			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y+1, tile));
+			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y, tile));
 		}
+		var bestTile = tile;
+		foreach (Vector2 potentialPlacement in potentialPlacements) {
+			var potentialTile = (Tile)TileHandler.GetTileScene(potentialPlacement).Instance();
+			if (potentialTile.score > bestTile.score) bestTile = potentialTile;
+		}
+		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
 	}
 	
 	// Returns true if place is empty and now available
-	public void UpdateNeighbour(float x, float y, Tile tile) {
+	public Vector2 UpdateNeighbour(float x, float y, Tile tile) {
 		if (IsTile((int) x, (int) y)) {
 			SetCell((int) x,(int) y, 0, false, false, false, availableTileType);
 		}
 		else {
 			var selectedTileType = GetCellAutotileCoord((int) x, (int) y);
+			if (selectedTileType == new Vector2(1,5)) return tile.GetAtlasCoord();
+			
 			var newTileType = tile.GetUpdatedTile(selectedTileType);
 			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
+			// Check if adjacent tile would change current tile being placed
+			return ((Tile)TileHandler.GetTileScene(newTileType).Instance()).GetUpdatedTile(tile.GetAtlasCoord());
 		}
+		return tile.GetAtlasCoord(); // inefficient
 	}
 	
 	// Returns true if pos is an available tile 

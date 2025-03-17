@@ -5,6 +5,7 @@ public class Tile : Node2D
 {
 	public Vector2 atlasCoord = Vector2.Zero;
 	public string name = "Unknown";
+	public int score = 0;
 	
 	public Vector2 GetAtlasCoord()
 	{
