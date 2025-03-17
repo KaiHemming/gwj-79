@@ -5,17 +5,19 @@ using System.Collections;
 public class Sprite : Godot.Sprite
 {
 	private TileMap tileMap;
-	public Vector2 curTile = Vector2.Zero;
+	public Tile curTile;
 	public RandomNumberGenerator rng = new RandomNumberGenerator();
 	
 	// Tile Scenes
-	private static PackedScene grassScene = GD.Load<PackedScene>("res://scenes/Grass.tscn");
-	private static PackedScene dirtScene = GD.Load<PackedScene>("res://scenes/Dirt.tscn");
+	private static PackedScene grassScene = GD.Load<PackedScene>("res://scenes/tiles/Grass.tscn");
+	private static PackedScene dirtScene = GD.Load<PackedScene>("res://scenes/tiles/Dirt.tscn");
+	private static PackedScene waterScene = GD.Load<PackedScene>("res://scenes/tiles/Water.tscn");
 	
 	// Tile collection array
 	private PackedScene[] tiles = {
 		grassScene,
-		dirtScene
+		dirtScene,
+		waterScene
 	};
 	
 	// Bag of tiles
@@ -25,10 +27,19 @@ public class Sprite : Godot.Sprite
 	{
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		tileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("TileMap");
+		
+		// Starting bag
+		// One Grass
 		bag.Add(0);
+		// 8 Dirt
 		for (int i = 0; i < 8; i++) {
 			bag.Add(1);
 		}
+		// 5 Water
+		for (int i = 0; i < 3; i++) {
+			bag.Add(2);
+		}
+		
 		GD.Randomize();
 		rng.Randomize();
 		GetNextTile();
@@ -51,6 +62,8 @@ public class Sprite : Godot.Sprite
 	public void PlaceTile(Vector2 pos) {
 		tileMap.PlaceTile(pos, curTile);
 		GetNextTile();
+		// Update neighbouring tiles
+		
 	}
 	// Gets next tile from bag
 	public void GetNextTile() {
@@ -62,6 +75,6 @@ public class Sprite : Godot.Sprite
 		}
 		Tile tile = (Tile) tileScene.Instance();
 		CurrentTileTextureControl.AddChild(tile);
-		curTile = tile.GetAtlasCoord();
+		curTile = tile;
 	}
 }

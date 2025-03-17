@@ -56,27 +56,33 @@ public class TileMap : Godot.TileMap
 		return this.WorldToMap(mousePos);
 	}
 	// Places a tile at pos
-	public void PlaceTile(Vector2 pos, Vector2 tile) {
-		SetCellv(pos, 0, false, false, false, tile);
-		PlaceIfNeighbouringAvailable(pos.x, pos.y+1);
-		PlaceIfNeighbouringAvailable(pos.x, pos.y-1);
+	public void PlaceTile(Vector2 pos, Tile tile) {
+		SetCellv(pos, 0, false, false, false, tile.GetAtlasCoord());
+		UpdateNeighbour(pos.x, pos.y+1, tile);
+		UpdateNeighbour(pos.x, pos.y-1, tile);
 		
 		if (pos.x%2 == 0) {
-			PlaceIfNeighbouringAvailable(pos.x-1, pos.y-1);
-			PlaceIfNeighbouringAvailable(pos.x-1, pos.y);
-			PlaceIfNeighbouringAvailable(pos.x+1, pos.y-1);
-			PlaceIfNeighbouringAvailable(pos.x+1, pos.y);
+			UpdateNeighbour(pos.x-1, pos.y-1, tile);
+			UpdateNeighbour(pos.x-1, pos.y, tile);
+			UpdateNeighbour(pos.x+1, pos.y-1, tile);
+			UpdateNeighbour(pos.x+1, pos.y, tile);
 		} else {
-			PlaceIfNeighbouringAvailable(pos.x-1, pos.y+1);
-			PlaceIfNeighbouringAvailable(pos.x-1, pos.y);
-			PlaceIfNeighbouringAvailable(pos.x+1, pos.y+1);
-			PlaceIfNeighbouringAvailable(pos.x+1, pos.y);
+			UpdateNeighbour(pos.x-1, pos.y+1, tile);
+			UpdateNeighbour(pos.x-1, pos.y, tile);
+			UpdateNeighbour(pos.x+1, pos.y+1, tile);
+			UpdateNeighbour(pos.x+1, pos.y, tile);
 		}
 	}
 	
-	public void PlaceIfNeighbouringAvailable(float x, float y) {
+	// Returns true if place is empty and now available
+	public void UpdateNeighbour(float x, float y, Tile tile) {
 		if (IsTile((int) x, (int) y)) {
 			SetCell((int) x,(int) y, 0, false, false, false, availableTileType);
+		}
+		else {
+			var selectedTileType = GetCellAutotileCoord((int) x, (int) y);
+			var newTileType = tile.GetUpdatedTile(selectedTileType);
+			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
 		}
 	}
 	
