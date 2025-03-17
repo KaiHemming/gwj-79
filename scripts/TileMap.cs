@@ -4,6 +4,7 @@ using System;
 public class TileMap : Godot.TileMap
 {
 	private int xDiff = 10; // difference  between x size and x custom transform
+	private Vector2 availableTileType = new Vector2(1,5);
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -16,7 +17,9 @@ public class TileMap : Godot.TileMap
 		var pos = GetMousePosition();
 		GetParent().GetParent().GetNode("UI")
 			.GetNode<Label>("Position").Text = 
-				"" + pos + " " + GetCellAutotileCoord((int) pos.x, (int) pos.y);
+				"" + pos + 
+				" " + GetCellAutotileCoord((int) pos.x, (int) pos.y) +
+				" Scale: " + GetParent<Camera2D>().Scale;
 	}
 
 	// https://www.redblobgames.com/grids/hexagons/
@@ -46,10 +49,50 @@ public class TileMap : Godot.TileMap
 			mousePos.y = mousePos.y - CellSize.y+xDiff;
 		}
 		
-		mousePos.x = mousePos.x + CellSize.x/4; // This is innacurate
+		//mousePos.x = mousePos.x + CellSize.x/4; // TODO: This is innacurate
 		
 		//GD.Print("mousePos after" + mousePos);
 		//GD.Print();
 		return this.WorldToMap(mousePos);
+	}
+	// Places a tile at pos
+	public void PlaceTile(Vector2 pos, Vector2 tile) {
+		SetCellv(pos, 0, false, false, false, tile);
+		PlaceIfNeighbouringAvailable(pos.x, pos.y+1);
+		PlaceIfNeighbouringAvailable(pos.x, pos.y-1);
+		
+		if (pos.x%2 == 0) {
+			PlaceIfNeighbouringAvailable(pos.x-1, pos.y-1);
+			PlaceIfNeighbouringAvailable(pos.x-1, pos.y);
+			PlaceIfNeighbouringAvailable(pos.x+1, pos.y-1);
+			PlaceIfNeighbouringAvailable(pos.x+1, pos.y);
+		} else {
+			PlaceIfNeighbouringAvailable(pos.x-1, pos.y+1);
+			PlaceIfNeighbouringAvailable(pos.x-1, pos.y);
+			PlaceIfNeighbouringAvailable(pos.x+1, pos.y+1);
+			PlaceIfNeighbouringAvailable(pos.x+1, pos.y);
+		}
+	}
+	
+	public void PlaceIfNeighbouringAvailable(float x, float y) {
+		if (IsTile((int) x, (int) y)) {
+			SetCell((int) x,(int) y, 0, false, false, false, availableTileType);
+		}
+	}
+	
+	// Returns true if pos is an available tile 
+	public bool IsAvailable(Vector2 pos) {
+		var selectedTileType = GetCellAutotileCoord((int) pos.x, (int) pos.y);
+		if (selectedTileType == availableTileType) {
+			return true;
+		}
+		return false;
+	}
+	
+	public bool IsTile(int x, int y) {
+		if (GetCell(x, y) == -1) {
+			return true;
+		}
+		return false;
 	}
 }

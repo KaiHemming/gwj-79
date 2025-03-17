@@ -7,7 +7,6 @@ public class Sprite : Godot.Sprite
 	private TileMap tileMap;
 	public Vector2 curTile = Vector2.Zero;
 	public RandomNumberGenerator rng = new RandomNumberGenerator();
-	private Vector2 availableTileType = new Vector2(1,5);
 	
 	// Tile Scenes
 	private static PackedScene grassScene = GD.Load<PackedScene>("res://scenes/Grass.tscn");
@@ -41,15 +40,16 @@ public class Sprite : Godot.Sprite
 		// Check if place tile
 		if (inputEvent.IsActionPressed("ui_accept")) {
 			var mousePos = tileMap.GetMousePosition();
-			var selectedTileType = tileMap.GetCellAutotileCoord((int) mousePos.x, (int) mousePos.y);
-			if (selectedTileType == availableTileType) {
+			if (tileMap.IsAvailable(mousePos)) {
 				PlaceTile(mousePos);
-			}
+			} 
 		}
+		// Check if zoom
+		
 	}
 	// Places a tile at pos
 	public void PlaceTile(Vector2 pos) {
-		tileMap.SetCellv(pos, 0, false, false, false, curTile);
+		tileMap.PlaceTile(pos, curTile);
 		GetNextTile();
 	}
 	// Gets next tile from bag
@@ -62,7 +62,6 @@ public class Sprite : Godot.Sprite
 		}
 		Tile tile = (Tile) tileScene.Instance();
 		CurrentTileTextureControl.AddChild(tile);
-		GD.Print(tile.atlasCoord);
 		curTile = tile.GetAtlasCoord();
 	}
 }
