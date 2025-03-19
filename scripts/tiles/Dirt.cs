@@ -5,5 +5,6 @@ public class Dirt : Tile
 {
 	public Dirt() {
 		atlasCoord = new Vector2(0,3);
+		name = "Dirt";
 	}
 }

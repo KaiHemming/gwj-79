@@ -1,17 +1,28 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TileMap : Godot.TileMap
 {
 	private int xDiff = 10; // difference  between x size and x custom transform
 	private Vector2 availableTileType = new Vector2(1,5);
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		
-	}
+	protected Vector2[] sameColNeighbours = {
+		new Vector2(0,1),
+		new Vector2(0,-1)
+	};
+	protected Vector2[] evenRowNeighbours = {
+		new Vector2(-1,-1),
+		new Vector2(-1,0),
+		new Vector2(1,-1),
+		new Vector2(1,0)
+	};
+	protected Vector2[] oddRowNeighbours = {
+		new Vector2(-1,1),
+		new Vector2(-1,0),
+		new Vector2(1,1),
+		new Vector2(1,0)
+	};
 
 	public override void _Process(float delta)
 	{
@@ -20,7 +31,8 @@ public class TileMap : Godot.TileMap
 			.GetNode<Label>("Position").Text = 
 				"" + pos + 
 				" " + GetCellAutotileCoord((int) pos.x, (int) pos.y) +
-				" Scale: " + GetParent<Camera2D>().Scale;
+				" Scale: " + GetParent<Camera2D>().Scale +
+				" Cur tile: " + GetParent().GetParent().GetNode<Sprite>("Sprite").curTile.GetName();
 	}
 
 	// https://www.redblobgames.com/grids/hexagons/
@@ -59,29 +71,27 @@ public class TileMap : Godot.TileMap
 	// Places a tile at pos
 	public void PlaceTile(Vector2 pos, Tile tile) {
 		HashSet<Vector2> potentialPlacements = new HashSet<Vector2>();
-		potentialPlacements.Add(UpdateNeighbour(pos.x, pos.y+1, tile));
-		potentialPlacements.Add(UpdateNeighbour(pos.x, pos.y-1, tile));
 		
+		Vector2[] updates;
 		if (pos.x%2 == 0) {
-			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y-1, tile));
-			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y, tile));
-			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y-1, tile));
-			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y, tile));
+			updates = sameColNeighbours.Concat(evenRowNeighbours).ToArray();
 		} else {
-			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y+1, tile));
-			potentialPlacements.Add(UpdateNeighbour(pos.x-1, pos.y, tile));
-			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y+1, tile));
-			potentialPlacements.Add(UpdateNeighbour(pos.x+1, pos.y, tile));
+			updates = sameColNeighbours.Concat(oddRowNeighbours).ToArray();
 		}
+		foreach (Vector2 update in updates) {
+			potentialPlacements.Add(UpdateNeighbour(pos.x+update.x, pos.y+update.y, tile));
+		}
+		
 		var bestTile = tile;
 		foreach (Vector2 potentialPlacement in potentialPlacements) {
 			var potentialTile = (Tile)TileHandler.GetTileScene(potentialPlacement).Instance();
 			if (potentialTile.score > bestTile.score) bestTile = potentialTile;
 		}
 		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
+		CountNeighboursOfType(pos);
 	}
 	
-	// Returns true if place is empty and now available
+	// Returns a different tile atlasCoord if it would change type.
 	public Vector2 UpdateNeighbour(float x, float y, Tile tile) {
 		if (IsTile((int) x, (int) y)) {
 			SetCell((int) x,(int) y, 0, false, false, false, availableTileType);
@@ -96,6 +106,33 @@ public class TileMap : Godot.TileMap
 			return ((Tile)TileHandler.GetTileScene(newTileType).Instance()).GetUpdatedTile(tile.GetAtlasCoord());
 		}
 		return tile.GetAtlasCoord(); // inefficient
+	}
+	
+	public Dictionary<Vector2, int> CountNeighboursOfType(Vector2 location) {
+		Dictionary<Vector2, int> countedNeighbours = new Dictionary<Vector2, int>();
+		Vector2[] neighbourLocations;
+		if (location.x%2 == 0) {
+			neighbourLocations = sameColNeighbours.Concat(evenRowNeighbours).ToArray();
+		} else {
+			neighbourLocations = sameColNeighbours.Concat(oddRowNeighbours).ToArray();
+		}
+		foreach (Vector2 neighbourLocation in neighbourLocations) {
+			var curLocation = new Vector2(location.x+neighbourLocation.x, location.y+neighbourLocation.y);
+			if (IsAvailable(curLocation)) {
+				continue;
+			}
+			var curAtlasCoord = GetCellAutotileCoord((int) curLocation.x, (int) curLocation.y);
+			if (countedNeighbours.ContainsKey(curAtlasCoord)) {
+				countedNeighbours[curAtlasCoord]++;
+				continue;
+			}
+			countedNeighbours.Add(curAtlasCoord, 1);
+		}
+		// GD.Print("Printing neighbours found");
+		// foreach (KeyValuePair<Vector2, int> countedNeighbour in countedNeighbours) {
+		// 	GD.Print(countedNeighbour);
+		// }
+		return countedNeighbours;
 	}
 	
 	// Returns true if pos is an available tile 

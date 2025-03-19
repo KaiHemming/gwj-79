@@ -6,6 +6,7 @@ public class Water : Tile
 	public Water() {
 		atlasCoord = new Vector2(6,0);
 		score = 1;
+		name = "Water";
 	}
 	
 	public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {
