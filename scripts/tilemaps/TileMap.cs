@@ -6,7 +6,7 @@ using System.Linq;
 public class TileMap : Godot.TileMap
 {
 	private int xDiff = 10; // difference  between x size and x custom transform
-	private Vector2 availableTileType = new Vector2(1,5);
+	public Vector2 availableTileType = new Vector2(1,5);
 	protected Vector2[] sameColNeighbours = {
 		new Vector2(0,1),
 		new Vector2(0,-1)
@@ -69,7 +69,7 @@ public class TileMap : Godot.TileMap
 		return this.WorldToMap(mousePos);
 	}
 	// Places a tile at pos
-	public void PlaceTile(Vector2 pos, Tile tile) {
+	public virtual void PlaceTile(Vector2 pos, Tile tile) {
 		HashSet<Vector2> potentialPlacements = new HashSet<Vector2>();
 		
 		Vector2[] updates;
@@ -92,7 +92,7 @@ public class TileMap : Godot.TileMap
 	}
 	
 	// Returns a different tile atlasCoord if it would change type.
-	public Vector2 UpdateNeighbour(float x, float y, Tile tile) {
+	public virtual Vector2 UpdateNeighbour(float x, float y, Tile tile) {
 		if (IsTile((int) x, (int) y)) {
 			SetCell((int) x,(int) y, 0, false, false, false, availableTileType);
 		}
@@ -136,7 +136,7 @@ public class TileMap : Godot.TileMap
 	}
 	
 	// Returns true if pos is an available tile 
-	public bool IsAvailable(Vector2 pos) {
+	public virtual bool IsAvailable(Vector2 pos) {
 		var selectedTileType = GetCellAutotileCoord((int) pos.x, (int) pos.y);
 		if (selectedTileType == availableTileType) {
 			return true;
