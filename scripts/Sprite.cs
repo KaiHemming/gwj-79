@@ -7,7 +7,10 @@ public class Sprite : Godot.Sprite
 	private TileMap tileMap;
 	private TileMap iconTileMap;
 	public Tile curTile;
+	private int curTileIndex;
 	public RandomNumberGenerator rng = new RandomNumberGenerator();
+	private Label scoreLabel;
+	private static PackedScene tileNotificationScene = GD.Load<PackedScene>("res://scenes/DiscoveredTileNotification.tscn");
 	
 	// Tile collection array
 	private Vector2[] tiles = {
@@ -25,23 +28,30 @@ public class Sprite : Godot.Sprite
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		tileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("TileMap");
 		iconTileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("IconTileMap");
+		scoreLabel = GetParent().GetNode<Control>("UI").GetNode<HBoxContainer>("HBoxContainer").GetNode<Label>("Score");
 		
 		// Starting bag
 		// One Grass and habitat
-		bag.Add(0);
-		bag. Add(3);
-		// 8 Dirt
-		for (int i = 0; i < 8; i++) {
+		//bag.Add(0);
+		//bag. Add(3);
+		// 30 Dirt
+		for (int i = 0; i < 30; i++) {
 			bag.Add(1);
 		}
-		// 5 Water
-		for (int i = 0; i < 3; i++) {
+		// 10 Water
+		for (int i = 0; i < 10; i++) {
 			bag.Add(2);
+		}
+		// 5 Habitats
+		for (int i = 0; i < 5; i++) {
+			bag.Add(3);
 		}
 		
 		GD.Randomize();
 		rng.Randomize();
-		GetNextTile();
+		var tileScene = TileHandler.GetTileScene(tiles[0]);
+		curTile = (Tile) tileScene.Instance();
+		curTileIndex = 0;
 	}
 	public override void _Process(float delta) {
 		this.GlobalPosition = GetGlobalMousePosition(); 
@@ -51,6 +61,8 @@ public class Sprite : Godot.Sprite
 		if (inputEvent.IsActionPressed("ui_accept")) {
 			var mousePos = tileMap.GetMousePosition();
 			PlaceTile(mousePos);
+			var score = tileMap.score + iconTileMap.score;
+			scoreLabel.Text = "" + score;
 		}
 		// Check if zoom
 		
@@ -58,14 +70,14 @@ public class Sprite : Godot.Sprite
 	// Places a tile at pos
 	public void PlaceTile(Vector2 pos) {
 		if (curTile is Habitat) {
-			GD.Print(tileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y));
-			GD.Print(tileMap.availableTileType);
-			if (tileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y) != tileMap.availableTileType) {
-				iconTileMap.PlaceTile(pos, curTile);
-				GetNextTile();
+			if (tileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y) == tileMap.availableTileType) {
+				return;
 			}
-			else {
+			if (tileMap.GetCell((int) pos.x, (int) pos.y) == TileMap.InvalidCell) {
+				return;
 			}
+			iconTileMap.PlaceTile(pos, curTile);
+			GetNextTile();
 		}
 		else {
 			if (tileMap.IsAvailable(pos)) {
@@ -76,9 +88,14 @@ public class Sprite : Godot.Sprite
 	}
 	// Gets next tile from bag
 	public void GetNextTile() {
-		int random = rng.RandiRange(0, bag.Count-1);
-		Vector2 tileAtlas = tiles[(int) bag[random]];
-		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<Control>("CurrentTileTexture");
+		bag.Remove(curTileIndex);
+		if (bag.Count == 0) {
+			TriggerEndOfGame();
+			return;
+		}
+		curTileIndex = rng.RandiRange(0, bag.Count-1);
+		Vector2 tileAtlas = tiles[(int) bag[curTileIndex]];
+		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
 		foreach (Node i in CurrentTileTextureControl.GetChildren()) {
 			i.QueueFree();
 		}
@@ -86,5 +103,20 @@ public class Sprite : Godot.Sprite
 		Tile tile = (Tile) tileScene.Instance();
 		CurrentTileTextureControl.AddChild(tile);
 		curTile = tile;
+	}
+
+	// TODO: tile discovered function in sprite
+	public void tileDiscovered(Tile tile) {
+		GetParent().AddChild(tileNotificationScene.Instance());
+	}
+
+	// TODO: icon discovered function in sprite
+	public void iconDiscovered() {
+
+	}
+
+	// TODO: Trigger end of game
+	public void TriggerEndOfGame() {
+
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/tilemaps/TileMap.cs" type="Script" id=1]
 [ext_resource path="res://assets/fantasyhextiles_v3_borderless.png" type="Texture" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://scenes/UI.tscn" type="PackedScene" id=6]
 [ext_resource path="res://assets/habitats/test-tile.png" type="Texture" id=7]
 [ext_resource path="res://scripts/tilemaps/IconTileMap.cs" type="Script" id=8]
+[ext_resource path="res://assets/music/Evenings Ebb and Flow.wav" type="AudioStream" id=9]
 
 [sub_resource type="TileSet" id=1]
 0/name = "fantasyhextiles_v3_borderless.png 0"
@@ -50,8 +51,6 @@
 
 [node name="Main" type="Node2D"]
 
-[node name="UI" parent="." instance=ExtResource( 6 )]
-
 [node name="Camera2D" type="Camera2D" parent="."]
 scale = Vector2( 3, 3 )
 anchor_mode = 0
@@ -88,3 +87,10 @@ script = ExtResource( 8 )
 texture = ExtResource( 3 )
 centered = false
 script = ExtResource( 4 )
+
+[node name="UI" parent="." instance=ExtResource( 6 )]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = 0.5
+autoplay = true

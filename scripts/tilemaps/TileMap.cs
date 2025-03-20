@@ -1,11 +1,13 @@
 using Godot;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class TileMap : Godot.TileMap
 {
 	private int xDiff = 10; // difference  between x size and x custom transform
+	public int score = 0;
 	public Vector2 availableTileType = new Vector2(1,5);
 	protected Vector2[] sameColNeighbours = {
 		new Vector2(0,1),
@@ -23,6 +25,13 @@ public class TileMap : Godot.TileMap
 		new Vector2(1,1),
 		new Vector2(1,0)
 	};
+	public HashSet<Tile> tilesDiscovered = new HashSet<Tile>() {};
+
+	public override void _Ready()
+	{
+		tilesDiscovered.Add((Tile)TileHandler.dirtScene.Instance());
+		tilesDiscovered.Add((Tile)TileHandler.waterScene.Instance());
+	}
 
 	public override void _Process(float delta)
 	{
@@ -87,7 +96,12 @@ public class TileMap : Godot.TileMap
 			var potentialTile = (Tile)TileHandler.GetTileScene(potentialPlacement).Instance();
 			if (potentialTile.score > bestTile.score) bestTile = potentialTile;
 		}
+		if (!tilesDiscovered.Contains(bestTile)) {
+			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
+			tilesDiscovered.Add(bestTile);
+		}
 		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
+		score += bestTile.score;
 		CountNeighboursOfType(pos);
 	}
 	
@@ -99,11 +113,19 @@ public class TileMap : Godot.TileMap
 		else {
 			var selectedTileType = GetCellAutotileCoord((int) x, (int) y);
 			if (selectedTileType == new Vector2(1,5)) return tile.GetAtlasCoord();
+			var selectedTile = (Tile)TileHandler.GetTileScene(selectedTileType).Instance();
 			
 			var newTileType = tile.GetUpdatedTile(selectedTileType);
 			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
+			var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
+			if (!tilesDiscovered.Contains(newTile)) {
+				GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
+				tilesDiscovered.Add(newTile);
+			}
+
+			score += newTile.score - selectedTile.score;
 			// Check if adjacent tile would change current tile being placed
-			return ((Tile)TileHandler.GetTileScene(newTileType).Instance()).GetUpdatedTile(tile.GetAtlasCoord());
+			return newTile.GetUpdatedTile(tile.GetAtlasCoord());
 		}
 		return tile.GetAtlasCoord(); // inefficient
 	}

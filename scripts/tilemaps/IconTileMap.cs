@@ -1,11 +1,13 @@
 using Godot;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class IconTileMap : TileMap
 {
 	private TileMap tileMap;
+	public int score = 0;
 
 	public override void _Ready()
 	{
@@ -24,27 +26,54 @@ public class IconTileMap : TileMap
 			GD.Print(countedNeighbour);
 		}
 
-		foreach ((Habitat, LandRequirement[], IconRequirement[]) habitatRequirement in HabitatHandler.requirementMapping) {
+		foreach ((Habitat, LandRequirement[], IconRequirement[], Vector2[]) habitatRequirement in HabitatHandler.requirementMapping) {
 			Boolean satisfiedLandRequirements = true;
 			Boolean satisfiedIconRequirements = true;
+			Boolean satisfiedTileRequirement = false;
+
+			foreach (Vector2 tileRequirement in habitatRequirement.Item4) {
+				if (tileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y) == tileRequirement) {
+					satisfiedTileRequirement = true;
+					break;
+				}
+			}
+			if (!satisfiedTileRequirement) continue;
 
 			foreach (LandRequirement landRequirement in habitatRequirement.Item2) {
-				if (!neighbouringLand.ContainsKey(landRequirement.atlasCoord)) satisfiedLandRequirements = false;
-				if (neighbouringLand[landRequirement.atlasCoord] < landRequirement.numRequired) satisfiedLandRequirements = false;
+				if (!neighbouringLand.ContainsKey(landRequirement.atlasCoord)) {
+					satisfiedLandRequirements = false;
+					break;
+				}
+				if (neighbouringLand[landRequirement.atlasCoord] < landRequirement.numRequired) {
+					satisfiedLandRequirements = false;
+					break;
+				}
 			}
 			if (!satisfiedLandRequirements) continue;
 
 			foreach (IconRequirement iconRequirement in habitatRequirement.Item3) {
-				if (!neighbouringIcons.ContainsKey(iconRequirement.atlasCoord)) satisfiedIconRequirements = false;
-				if (neighbouringIcons[iconRequirement.atlasCoord] < iconRequirement.numRequired) satisfiedIconRequirements = false;
+				if (!neighbouringIcons.ContainsKey(iconRequirement.atlasCoord)) {
+					satisfiedIconRequirements = false;
+					break;
+				}
+				if (neighbouringIcons[iconRequirement.atlasCoord] < iconRequirement.numRequired) {
+					satisfiedIconRequirements = false;
+					break;
+				}
 			}
 			if (!satisfiedIconRequirements) continue;
 
 			if (habitatRequirement.Item1.score > bestHabitat.score) {
 				bestHabitat= habitatRequirement.Item1;
 			}
+
 		}
 		SetCell((int) pos.x,(int) pos.y, 0, false, false, false, bestHabitat.atlasCoord);
+		score += bestHabitat.score;
+		if (!tilesDiscovered.Contains(bestHabitat)) {
+			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestHabitat);
+			tilesDiscovered.Add(bestHabitat);
+		}
 		
 		Vector2[] updates;
 		if (pos.x%2 == 0) {
@@ -66,6 +95,12 @@ public class IconTileMap : TileMap
 		
 		var newTileType = tile.GetUpdatedTile(selectedTileType);
 		tileMap.SetCell((int) x,(int) y, 0, false, false, false, newTileType);
+		var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
+		score += newTile.score;
+		if (!tilesDiscovered.Contains(newTile)) {
+			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
+			tilesDiscovered.Add(newTile);
+		}
 
 		return Vector2.Zero;
 	}

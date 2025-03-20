@@ -5,7 +5,7 @@ public class Water : Tile
 {
 	public Water() {
 		atlasCoord = new Vector2(6,0);
-		score = 1;
+		score = 0;
 		name = "Water";
 	}
 	
