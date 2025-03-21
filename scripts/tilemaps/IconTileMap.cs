@@ -17,11 +17,11 @@ public class IconTileMap : TileMap
 		Habitat bestHabitat = new Fox();
 		var neighbouringLand = tileMap.CountNeighboursOfType(pos);
 		var neighbouringIcons = CountNeighboursOfType(pos);
-		GD.Print("Printing neighbouring land found");
+		// GD.Print("Printing neighbouring land found");
 		foreach (KeyValuePair<Vector2, int> countedNeighbour in neighbouringLand) {
 			GD.Print(countedNeighbour);
 		}
-		GD.Print("Printing neighbouring icons found");
+		// GD.Print("Printing neighbouring icons found");
 		foreach (KeyValuePair<Vector2, int> countedNeighbour in neighbouringIcons) {
 			GD.Print(countedNeighbour);
 		}

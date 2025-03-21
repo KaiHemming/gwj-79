@@ -83,14 +83,14 @@ format = 1
 tile_data = PoolIntArray( 262157, 0, 0 )
 script = ExtResource( 8 )
 
-[node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 3 )
-centered = false
-script = ExtResource( 4 )
-
 [node name="UI" parent="." instance=ExtResource( 6 )]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
-volume_db = 0.5
+volume_db = 0.05
 autoplay = true
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+centered = false
+script = ExtResource( 4 )

@@ -92,7 +92,7 @@ public class Sprite : Godot.Sprite
 	}
 	// Gets next tile from bag
 	public void GetNextTile() {
-		GD.Print(bag.Count);
+		//GD.Print(bag.Count);
 		bag.RemoveAt(curTileIndex);
 		if (bag.Count == 0) {
 			curTileIndex = -1;
@@ -130,7 +130,7 @@ public class Sprite : Godot.Sprite
 		notification.RectPosition = GetViewportRect().Size/2;
 		if (tile is Habitat) {
 			for (int i = 0; i < tile.discoveryAddition; i++) {
-				bag.Add(new Vector2(-1, -1));
+				bag.Add(HABITAT_INDEX);
 			}
 		} else {
 			int indexOfTile = 0;
@@ -148,6 +148,10 @@ public class Sprite : Godot.Sprite
 
 	// TODO: Trigger end of game
 	public void TriggerEndOfGame() {
-
+		var endScreen = GetParent().GetNode("UI").GetNode<EndScreen>("EndScreen");
+		var animationPlayer = endScreen.GetNode<AnimationPlayer>("AnimationPlayer");
+		animationPlayer.Play("FadeIn");
+		endScreen.Visible = true;
+		endScreen.SetScore(tileMap.score + iconTileMap.score);
 	}
 }
