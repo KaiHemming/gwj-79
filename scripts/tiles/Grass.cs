@@ -7,5 +7,6 @@ public class Grass : Tile
 		name = "Grass";
 		score = 1;
 		atlasCoord = Vector2.Zero;
+		discoveryTitle = "You discovered grass!";
 	}
 }

@@ -99,7 +99,7 @@ public class IconTileMap : TileMap
 		tileMap.SetCell((int) x,(int) y, 0, false, false, false, newTileType);
 		var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
 		score += newTile.score;
-		if (!tilesDiscovered.Contains(newTile.atlasCoord)) {
+		if (!tileMap.tilesDiscovered.Contains(newTile.atlasCoord)) {
 			// GD.Print("Tile: " + newTile.atlasCoord);
 			// PrintTilesDiscovered();
 			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);

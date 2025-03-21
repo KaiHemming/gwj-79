@@ -10,7 +10,9 @@ public class Sprite : Godot.Sprite
 	private int curTileIndex;
 	public RandomNumberGenerator rng = new RandomNumberGenerator();
 	private Label scoreLabel;
+	private VBoxContainer notificationHolder;
 	private static PackedScene tileNotificationScene = GD.Load<PackedScene>("res://scenes/DiscoveredTileNotification.tscn");
+	private static int HABITAT_INDEX = 3;
 	
 	// Tile collection array
 	private Vector2[] tiles = {
@@ -29,6 +31,7 @@ public class Sprite : Godot.Sprite
 		tileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("TileMap");
 		iconTileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("IconTileMap");
 		scoreLabel = GetParent().GetNode<Control>("UI").GetNode<HBoxContainer>("HBoxContainer").GetNode<Label>("Score");
+		notificationHolder = GetParent().GetNode("UI").GetNode<VBoxContainer>("NotificationHolder");
 		
 		// Starting bag
 		// One Grass and habitat
@@ -110,12 +113,37 @@ public class Sprite : Godot.Sprite
 
 	// TODO: tile discovered function in sprite
 	public void tileDiscovered(Tile tile) {
-		GetParent().AddChild(tileNotificationScene.Instance());
-	}
-
-	// TODO: icon discovered function in sprite
-	public void iconDiscovered() {
-
+		var notification = (DiscoveredTileNotification)tileNotificationScene.Instance();
+		notification.GetNode<VBoxContainer>("VBoxContainer").GetNode<Label>("Title").Text= tile.discoveryTitle;
+		notification.GetNode<VBoxContainer>("VBoxContainer").GetNode<Label>("Description").Text = tile.discoveryDescription;
+		notificationHolder.AddChild(notification);
+		// Control textureControl = notification.GetNode("VBoxContainer").GetNode<Container>("Container");
+		// foreach (Node i in textureControl.GetChildren()) {
+		// 	i.QueueFree();
+		// }
+		// if (tile is Habitat) {
+		// 	textureControl.AddChild(HabitatHandler.GetTileScene(tile.atlasCoord));
+		// }
+		// else {
+		// 	textureControl.AddChild(TileHandler.GetTileScene(tile.atlasCoord).Instance());
+		// }
+		notification.RectPosition = GetViewportRect().Size/2;
+		if (tile is Habitat) {
+			for (int i = 0; i < tile.discoveryAddition; i++) {
+				bag.Add(new Vector2(-1, -1));
+			}
+		} else {
+			int indexOfTile = 0;
+			for (int i = 0; i < tiles.Length; i++) { // TODO: This could be optimised.
+				if (tiles[i] == tile.atlasCoord) {
+					indexOfTile = i;
+					break;
+				}
+			}
+			for (int i = 0; i < tile.discoveryAddition; i++) {
+				bag.Add(indexOfTile);
+			}
+		}
 	}
 
 	// TODO: Trigger end of game
