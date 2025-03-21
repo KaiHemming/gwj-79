@@ -25,12 +25,12 @@ public class TileMap : Godot.TileMap
 		new Vector2(1,1),
 		new Vector2(1,0)
 	};
-	public HashSet<Tile> tilesDiscovered = new HashSet<Tile>() {};
+	public HashSet<Vector2> tilesDiscovered = new HashSet<Vector2>() {};
 
 	public override void _Ready()
 	{
-		tilesDiscovered.Add((Tile)TileHandler.dirtScene.Instance());
-		tilesDiscovered.Add((Tile)TileHandler.waterScene.Instance());
+		tilesDiscovered.Add(new Vector2(0,3)); //dirt
+		tilesDiscovered.Add(new Vector2(6,0)); //water
 	}
 
 	public override void _Process(float delta)
@@ -96,13 +96,22 @@ public class TileMap : Godot.TileMap
 			var potentialTile = (Tile)TileHandler.GetTileScene(potentialPlacement).Instance();
 			if (potentialTile.score > bestTile.score) bestTile = potentialTile;
 		}
-		if (!tilesDiscovered.Contains(bestTile)) {
+		if (!tilesDiscovered.Contains(bestTile.atlasCoord)) {
+			// GD.Print("Tile: " + bestTile.atlasCoord);
+			// PrintTilesDiscovered();
 			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
-			tilesDiscovered.Add(bestTile);
+			tilesDiscovered.Add(bestTile.atlasCoord);
 		}
 		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
 		score += bestTile.score;
 		CountNeighboursOfType(pos);
+	}
+	public void PrintTilesDiscovered() {
+		GD.Print("Printing discovered tiles");
+		foreach (Vector2 tileAtlas in tilesDiscovered) {
+			GD.Print(tileAtlas);
+		}
+		GD.Print();
 	}
 	
 	// Returns a different tile atlasCoord if it would change type.
@@ -118,9 +127,11 @@ public class TileMap : Godot.TileMap
 			var newTileType = tile.GetUpdatedTile(selectedTileType);
 			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
 			var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
-			if (!tilesDiscovered.Contains(newTile)) {
+			if (!tilesDiscovered.Contains(newTile.atlasCoord)) {
+				// GD.Print("Tile: " + newTile.atlasCoord);
+				// PrintTilesDiscovered();
 				GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
-				tilesDiscovered.Add(newTile);
+				tilesDiscovered.Add(newTile.atlasCoord);
 			}
 
 			score += newTile.score - selectedTile.score;

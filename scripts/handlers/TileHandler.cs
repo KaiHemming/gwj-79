@@ -7,7 +7,7 @@ public class TileHandler
 	public static PackedScene grassScene = GD.Load<PackedScene>("res://scenes/tiles/Grass.tscn");
 	public static PackedScene dirtScene = GD.Load<PackedScene>("res://scenes/tiles/Dirt.tscn");
 	public static PackedScene waterScene = GD.Load<PackedScene>("res://scenes/tiles/Water.tscn");
-	public static PackedScene habitatScene = GD.Load<PackedScene>("res://scenes/Habitat.tscn");
+	public static PackedScene habitatScene = GD.Load<PackedScene>("res://scenes/habitats/Habitat.tscn");
 
 	// TODO: Given Habitat atlasCoord (-1,-1), maybe refactor.
 	private static Dictionary<Vector2, PackedScene> tiles = new Dictionary<Vector2, PackedScene>{

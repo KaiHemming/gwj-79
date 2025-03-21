@@ -70,9 +70,11 @@ public class IconTileMap : TileMap
 		}
 		SetCell((int) pos.x,(int) pos.y, 0, false, false, false, bestHabitat.atlasCoord);
 		score += bestHabitat.score;
-		if (!tilesDiscovered.Contains(bestHabitat)) {
+		if (!tilesDiscovered.Contains(bestHabitat.atlasCoord)) {
+			// GD.Print("Tile: " + bestHabitat.atlasCoord);
+			// PrintTilesDiscovered();
 			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestHabitat);
-			tilesDiscovered.Add(bestHabitat);
+			tilesDiscovered.Add(bestHabitat.atlasCoord);
 		}
 		
 		Vector2[] updates;
@@ -97,9 +99,11 @@ public class IconTileMap : TileMap
 		tileMap.SetCell((int) x,(int) y, 0, false, false, false, newTileType);
 		var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
 		score += newTile.score;
-		if (!tilesDiscovered.Contains(newTile)) {
+		if (!tilesDiscovered.Contains(newTile.atlasCoord)) {
+			// GD.Print("Tile: " + newTile.atlasCoord);
+			// PrintTilesDiscovered();
 			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
-			tilesDiscovered.Add(newTile);
+			tilesDiscovered.Add(newTile.atlasCoord);
 		}
 
 		return Vector2.Zero;

@@ -49,7 +49,7 @@ public class Sprite : Godot.Sprite
 		
 		GD.Randomize();
 		rng.Randomize();
-		var tileScene = TileHandler.GetTileScene(tiles[0]);
+		var tileScene = TileHandler.GetTileScene(tiles[1]);
 		curTile = (Tile) tileScene.Instance();
 		curTileIndex = 0;
 	}
@@ -69,6 +69,7 @@ public class Sprite : Godot.Sprite
 	}
 	// Places a tile at pos
 	public void PlaceTile(Vector2 pos) {
+		if (curTileIndex == -1) return;
 		if (curTile is Habitat) {
 			if (tileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y) == tileMap.availableTileType) {
 				return;
@@ -88,8 +89,10 @@ public class Sprite : Godot.Sprite
 	}
 	// Gets next tile from bag
 	public void GetNextTile() {
-		bag.Remove(curTileIndex);
+		GD.Print(bag.Count);
+		bag.RemoveAt(curTileIndex);
 		if (bag.Count == 0) {
+			curTileIndex = -1;
 			TriggerEndOfGame();
 			return;
 		}
