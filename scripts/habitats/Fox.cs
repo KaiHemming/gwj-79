@@ -10,7 +10,7 @@ public class Fox : Habitat
 		discoveryTitle = "A fox has moved in!";
 	}
 
-	public virtual Vector2 GetUpdatedTile(Vector2 atlasCoord) {
+	public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {
 		return atlasCoord;
 	}
 }

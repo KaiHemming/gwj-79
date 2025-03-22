@@ -5,7 +5,7 @@ public class Tile : Control
 {
 	public Vector2 atlasCoord;
 	public string name = "Unknown";
-	public int score = 0;
+	public int score = 1;
 	public int discoveryAddition = 5;
 	public String discoveryTitle = "You discovered a new tile!";
 	public string discoveryDescription = "5 more have been added to your bag";

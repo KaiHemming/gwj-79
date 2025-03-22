@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/tiles/Water.cs" type="Script" id=1]
-[ext_resource path="res://assets/tiles/tile006.png" type="Texture" id=2]
+[ext_resource path="res://assets/tiles/water.png" type="Texture" id=2]
 
 [node name="Water" type="Control"]
 anchor_left = 0.5
@@ -16,5 +16,4 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
-grow_vertical = 2
 texture = ExtResource( 2 )

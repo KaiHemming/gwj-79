@@ -58,6 +58,9 @@ public class Sprite : Godot.Sprite
 		curTileIndex = 0;
 		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
 		CurrentTileTextureControl.AddChild(curTile);
+		var texture = curTile.GetNode<TextureRect>("TextureRect");
+		texture.RectScale = new Vector2(0.5f,0.5f);
+		texture.SetPosition(new Vector2(75,0));
 	}
 	public override void _Process(float delta) {
 		this.GlobalPosition = GetGlobalMousePosition(); 
@@ -112,6 +115,9 @@ public class Sprite : Godot.Sprite
 		var tileScene = TileHandler.GetTileScene(tileAtlas);
 		Tile tile = (Tile) tileScene.Instance();
 		CurrentTileTextureControl.AddChild(tile);
+		var texture = tile.GetNode<TextureRect>("TextureRect");
+		texture.RectScale = new Vector2(0.5f,0.5f);
+		texture.SetPosition(new Vector2(75,0));
 		curTile = tile;
 	}
 

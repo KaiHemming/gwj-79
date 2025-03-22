@@ -84,7 +84,7 @@ public class IconTileMap : TileMap
 			updates = sameColNeighbours.Concat(oddRowNeighbours).ToArray();
 		}
 		foreach (Vector2 update in updates) {
-			UpdateNeighbour(pos.x+update.x, pos.y+update.y, tile);
+			UpdateNeighbour(pos.x+update.x, pos.y+update.y, bestHabitat);
 		}
 	}
 	// Changed to update neighbours on regular tilemap
