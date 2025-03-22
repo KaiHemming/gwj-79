@@ -93,7 +93,7 @@ public class IconTileMap : TileMap
 			return Vector2.Zero;
 		}
 		var selectedTileType = tileMap.GetCellAutotileCoord((int) x, (int) y);
-		if (selectedTileType == new Vector2(1,5)) return Vector2.Zero;
+		if (selectedTileType == availableTileType) return Vector2.Zero;
 		
 		var newTileType = tile.GetUpdatedTile(selectedTileType);
 		tileMap.SetCell((int) x,(int) y, 0, false, false, false, newTileType);

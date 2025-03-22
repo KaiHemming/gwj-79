@@ -4,7 +4,7 @@ using System;
 public class Dirt : Tile
 {
 	public Dirt() {
-		atlasCoord = new Vector2(0,3);
+		atlasCoord = Vector2.Zero;
 		name = "Dirt";
 	}
 }

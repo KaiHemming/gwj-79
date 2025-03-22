@@ -3,10 +3,17 @@
 [ext_resource path="res://assets/habitats/fox-emote (1).png" type="Texture" id=1]
 [ext_resource path="res://scripts/Habitat.cs" type="Script" id=2]
 
-[node name="Habitat" type="Node2D"]
+[node name="Habitat" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource( 2 )
 
 [node name="TextureRect" type="TextureRect" parent="."]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_left = -150.0
+margin_right = 150.0
+margin_bottom = 300.0
 texture = ExtResource( 1 )

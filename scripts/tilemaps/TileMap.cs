@@ -6,9 +6,9 @@ using System.Linq;
 
 public class TileMap : Godot.TileMap
 {
-	private int xDiff = 10; // difference  between x size and x custom transform
+	private int xDiff = 34; // difference  between x size and x custom transform
 	public int score = 0;
-	public Vector2 availableTileType = new Vector2(1,5);
+	public Vector2 availableTileType = new Vector2(4,0);
 	protected Vector2[] sameColNeighbours = {
 		new Vector2(0,1),
 		new Vector2(0,-1)
@@ -29,8 +29,8 @@ public class TileMap : Godot.TileMap
 
 	public override void _Ready()
 	{
-		tilesDiscovered.Add(new Vector2(0,3)); //dirt
-		tilesDiscovered.Add(new Vector2(6,0)); //water
+		tilesDiscovered.Add(Vector2.Zero); //dirt
+		tilesDiscovered.Add(new Vector2(3,0)); //water
 	}
 
 	public override void _Process(float delta)
@@ -38,10 +38,10 @@ public class TileMap : Godot.TileMap
 		var pos = GetMousePosition();
 		GetParent().GetParent().GetNode("UI")
 			.GetNode<Label>("Position").Text = 
-				"" + pos + 
-				" " + GetCellAutotileCoord((int) pos.x, (int) pos.y) +
+				"Pos:" + pos + 
+				" Hovered tile:" + GetCellAutotileCoord((int) pos.x, (int) pos.y) +
 				" Scale: " + GetParent<Camera2D>().Scale +
-				" Cur tile: " + GetParent().GetParent().GetNode<Sprite>("Sprite").curTile.GetName();
+				" Cur bag tile: " + GetParent().GetParent().GetNode<Sprite>("Sprite").curTile.GetName();
 	}
 
 	// https://www.redblobgames.com/grids/hexagons/
@@ -65,13 +65,16 @@ public class TileMap : Godot.TileMap
 		//GD.Print("squareY " + squareY);
 		//GD.Print("col odd/even " + Math.Floor(squareX%2));
 		
-		if (Math.Floor(squareX%2) == 0) {
-			mousePos.y = mousePos.y - (CellSize.y+xDiff)/2;
-		} else {
-			mousePos.y = mousePos.y - CellSize.y+xDiff;
-		}
+		// if (Math.Floor(squareX%2) == 0) {
+		// 	mousePos.y = mousePos.y - (CellSize.y+xDiff)/2;
+		// } else {
+		// 	mousePos.y = mousePos.y - CellSize.y+xDiff;
+		// }
 		
 		//mousePos.x = mousePos.x + CellSize.x/4; // TODO: This is innacurate
+
+		mousePos.y -= 45;
+		mousePos.x -= xDiff;
 		
 		//GD.Print("mousePos after" + mousePos);
 		//GD.Print();
@@ -121,7 +124,7 @@ public class TileMap : Godot.TileMap
 		}
 		else {
 			var selectedTileType = GetCellAutotileCoord((int) x, (int) y);
-			if (selectedTileType == new Vector2(1,5)) return tile.GetAtlasCoord();
+			if (selectedTileType == availableTileType) return tile.GetAtlasCoord();
 			var selectedTile = (Tile)TileHandler.GetTileScene(selectedTileType).Instance();
 			
 			var newTileType = tile.GetUpdatedTile(selectedTileType);

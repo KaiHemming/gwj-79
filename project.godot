@@ -19,6 +19,10 @@ config/icon="res://icon.png"
 window/size/width=1920
 window/size/height=1080
 
+[global]
+
+background=false
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
@@ -74,4 +78,5 @@ common/enable_pause_aware_picking=true
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0.368627, 0.403922, 0.333333, 1 )
 environment/default_environment="res://default_env.tres"

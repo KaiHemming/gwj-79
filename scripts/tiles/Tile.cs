@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class Tile : Node2D
+public class Tile : Control
 {
 	public Vector2 atlasCoord;
 	public string name = "Unknown";

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/fantasyhextiles_v3_borderless.png-7992ddce2bf2e78e1b1b48b99b0929a0.stex"
+path="res://.import/hab tiles.png-73a7636d9100202abdc9816b098349f8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/fantasyhextiles_v3_borderless.png"
-dest_files=[ "res://.import/fantasyhextiles_v3_borderless.png-7992ddce2bf2e78e1b1b48b99b0929a0.stex" ]
+source_file="res://assets/hab tiles.png"
+dest_files=[ "res://.import/hab tiles.png-73a7636d9100202abdc9816b098349f8.stex" ]
 
 [params]
 
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=false
+detect_3d=true
 svg/scale=1.0

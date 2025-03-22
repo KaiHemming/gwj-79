@@ -13,12 +13,13 @@ public class Sprite : Godot.Sprite
 	private VBoxContainer notificationHolder;
 	private static PackedScene tileNotificationScene = GD.Load<PackedScene>("res://scenes/DiscoveredTileNotification.tscn");
 	private static int HABITAT_INDEX = 3;
+	public bool paused = false;
 	
 	// Tile collection array
 	private Vector2[] tiles = {
 		new Vector2(0,0),
-		new Vector2(0,3),
-		new Vector2(6,0),
+		new Vector2(1,0),
+		new Vector2(2,0),
 		new Vector2(-1,-1)
 	};
 	
@@ -27,7 +28,7 @@ public class Sprite : Godot.Sprite
 	
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Hidden;
+		//Input.MouseMode = Input.MouseModeEnum.Hidden;
 		tileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("TileMap");
 		iconTileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("IconTileMap");
 		scoreLabel = GetParent().GetNode<Control>("UI").GetNode<HBoxContainer>("HBoxContainer").GetNode<Label>("Score");
@@ -39,7 +40,7 @@ public class Sprite : Godot.Sprite
 		//bag. Add(3);
 		// 30 Dirt
 		for (int i = 0; i < 30; i++) {
-			bag.Add(1);
+			bag.Add(0);
 		}
 		// 10 Water
 		for (int i = 0; i < 10; i++) {
@@ -60,6 +61,7 @@ public class Sprite : Godot.Sprite
 		this.GlobalPosition = GetGlobalMousePosition(); 
 	}
 	public override void _Input(InputEvent inputEvent) {
+		if (paused) return;
 		// Check if place tile
 		if (inputEvent.IsActionPressed("ui_accept")) {
 			var mousePos = tileMap.GetMousePosition();
