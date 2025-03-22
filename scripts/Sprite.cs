@@ -53,9 +53,11 @@ public class Sprite : Godot.Sprite
 		
 		GD.Randomize();
 		rng.Randomize();
-		var tileScene = TileHandler.GetTileScene(tiles[1]);
+		var tileScene = TileHandler.GetTileScene(tiles[0]);
 		curTile = (Tile) tileScene.Instance();
 		curTileIndex = 0;
+		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
+		CurrentTileTextureControl.AddChild(curTile);
 	}
 	public override void _Process(float delta) {
 		this.GlobalPosition = GetGlobalMousePosition(); 

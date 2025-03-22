@@ -18,13 +18,13 @@ public class IconTileMap : TileMap
 		var neighbouringLand = tileMap.CountNeighboursOfType(pos);
 		var neighbouringIcons = CountNeighboursOfType(pos);
 		// GD.Print("Printing neighbouring land found");
-		foreach (KeyValuePair<Vector2, int> countedNeighbour in neighbouringLand) {
-			GD.Print(countedNeighbour);
-		}
-		// GD.Print("Printing neighbouring icons found");
-		foreach (KeyValuePair<Vector2, int> countedNeighbour in neighbouringIcons) {
-			GD.Print(countedNeighbour);
-		}
+		// foreach (KeyValuePair<Vector2, int> countedNeighbour in neighbouringLand) {
+		// 	GD.Print(countedNeighbour);
+		// }
+		// // GD.Print("Printing neighbouring icons found");
+		// foreach (KeyValuePair<Vector2, int> countedNeighbour in neighbouringIcons) {
+		// 	GD.Print(countedNeighbour);
+		// }
 
 		foreach ((Habitat, LandRequirement[], IconRequirement[], Vector2[]) habitatRequirement in HabitatHandler.requirementMapping) {
 			Boolean satisfiedLandRequirements = true;

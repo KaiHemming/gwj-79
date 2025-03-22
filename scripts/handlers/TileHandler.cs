@@ -18,7 +18,6 @@ public class TileHandler
 	};
 
 	public static PackedScene GetTileScene(Vector2 atlasCoord) {
-		GD.Print(atlasCoord);
 		return tiles[atlasCoord];
 	}
 }
