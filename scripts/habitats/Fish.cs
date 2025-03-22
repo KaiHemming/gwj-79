@@ -7,7 +7,8 @@ public class Fish : Habitat
 		atlasCoord = new Vector2(3,0);
 		name = "Fish";
         score = 1;
-		discoveryTitle = "A fish has moved in! +1 for each neighbouring water.";
+		discoveryTitle = "A fish moved in!";
+        discoveryDescription = "+2 habitat tokens. +1 point for each neighbouring water.";
 	}
 
 	public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {

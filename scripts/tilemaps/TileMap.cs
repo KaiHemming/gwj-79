@@ -30,7 +30,7 @@ public class TileMap : Godot.TileMap
 	public override void _Ready()
 	{
 		tilesDiscovered.Add(Vector2.Zero); //dirt
-		tilesDiscovered.Add(new Vector2(3,0)); //water
+		tilesDiscovered.Add(new Vector2(2,0)); //water
 	}
 
 	public override void _Process(float delta)
@@ -41,7 +41,8 @@ public class TileMap : Godot.TileMap
 				"Pos:" + pos + 
 				" Hovered tile:" + GetCellAutotileCoord((int) pos.x, (int) pos.y) +
 				" Scale: " + GetParent<Camera2D>().Scale +
-				" Cur bag tile: " + GetParent().GetParent().GetNode<Sprite>("Sprite").curTile.GetName();
+				" Cur bag tile: " + GetParent().GetParent().GetNode<Sprite>("Sprite").curTile.GetName() +
+				" Bag size: " + GetParent().GetParent().GetNode<Sprite>("Sprite").bag.Count;
 	}
 
 	// https://www.redblobgames.com/grids/hexagons/

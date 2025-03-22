@@ -103,7 +103,7 @@ public class IconTileMap : TileMap
 			// GD.Print("Tile: " + newTile.atlasCoord);
 			// PrintTilesDiscovered();
 			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
-			tilesDiscovered.Add(newTile.atlasCoord);
+			tileMap.tilesDiscovered.Add(newTile.atlasCoord);
 		}
 
 		return Vector2.Zero;

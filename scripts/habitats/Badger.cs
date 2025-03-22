@@ -7,7 +7,8 @@ public class Badger : Habitat
 		atlasCoord = new Vector2(0,0);
 		name = "Badger";
         score = 2;
-		discoveryTitle = "A badger has moved in! +2 points +1 per grass neighbour";
+		discoveryTitle = "A badger has moved in! +2 points";
+        discoveryDescription = "+2 habitat tokens and +1 point per grass neighbour.";
 	}
 
     public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {

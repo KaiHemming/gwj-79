@@ -7,7 +7,7 @@ public class Bee : Habitat
 		atlasCoord = new Vector2(1,0);
 		name = "Bee";
         score = 1;
-		discoveryTitle = "A Bee has moved in, flowers bloom!";
+		discoveryTitle = "A Bee has moved in, flowers bloom! +1 point";
 	}
 
     public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {

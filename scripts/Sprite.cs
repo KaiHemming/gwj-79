@@ -24,7 +24,7 @@ public class Sprite : Godot.Sprite
 	};
 	
 	// Bag of tiles
-	private ArrayList bag = new ArrayList();
+	public ArrayList bag = new ArrayList();
 	
 	public override void _Ready()
 	{
@@ -60,7 +60,7 @@ public class Sprite : Godot.Sprite
 		CurrentTileTextureControl.AddChild(curTile);
 		var texture = curTile.GetNode<TextureRect>("TextureRect");
 		texture.RectScale = new Vector2(0.5f,0.5f);
-		texture.SetPosition(new Vector2(75,0));
+		texture.SetPosition(new Vector2(-75,0));
 	}
 	public override void _Process(float delta) {
 		this.GlobalPosition = GetGlobalMousePosition(); 
@@ -117,7 +117,7 @@ public class Sprite : Godot.Sprite
 		CurrentTileTextureControl.AddChild(tile);
 		var texture = tile.GetNode<TextureRect>("TextureRect");
 		texture.RectScale = new Vector2(0.5f,0.5f);
-		texture.SetPosition(new Vector2(75,0));
+		texture.SetPosition(new Vector2(-75,0));
 		curTile = tile;
 	}
 
@@ -150,6 +150,7 @@ public class Sprite : Godot.Sprite
 					break;
 				}
 			}
+			GD.Print("Adding " + tile.discoveryAddition + " " + indexOfTile + "s");
 			for (int i = 0; i < tile.discoveryAddition; i++) {
 				bag.Add(indexOfTile);
 			}

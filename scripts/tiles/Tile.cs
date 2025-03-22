@@ -8,7 +8,7 @@ public class Tile : Control
 	public int score = 1;
 	public int discoveryAddition = 5;
 	public String discoveryTitle = "You discovered a new tile!";
-	public string discoveryDescription = "5 more have been added to your bag";
+	public string discoveryDescription = "5 more have been added to your bag.";
 	
 	public Vector2 GetAtlasCoord()
 	{
