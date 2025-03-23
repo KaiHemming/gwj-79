@@ -84,7 +84,7 @@ cell_custom_transform = Transform2D( 226, 0, 0, 255, 0, 0 )
 cell_half_offset = 1
 cell_y_sort = true
 format = 1
-tile_data = PoolIntArray( 196619, 0, 4, 262154, 0, 4, 262155, 0, 0, 262156, 0, 4, 327690, 0, 4, 327691, 0, 4, 327692, 0, 4 )
+tile_data = PoolIntArray( 65545, 0, 4, 131079, 0, 4, 131080, 0, 4, 131081, 0, 0, 131082, 0, 4, 131083, 0, 4, 196615, 0, 4, 196616, 0, 0, 196617, 0, 0, 196618, 0, 0, 196619, 0, 4, 262151, 0, 4, 262152, 0, 0, 262153, 0, 0, 262154, 0, 0, 262155, 0, 4, 327688, 0, 4, 327689, 0, 4, 327690, 0, 4 )
 script = ExtResource( 1 )
 
 [node name="IconTileMap" type="TileMap" parent="Camera2D"]

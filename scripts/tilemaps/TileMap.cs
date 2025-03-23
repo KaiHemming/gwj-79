@@ -185,6 +185,7 @@ public class TileMap : Godot.TileMap
 
 			var bestTile = GetBestTile(location, selectedTile);
 			if (bestTile.atlasCoord != selectedTileType) {
+				CheckForHabitat(location);
 				SetCellv(location, 0, false, false, false, bestTile.atlasCoord);
 				ui.AddScore(bestTile.score - selectedTile.score);
 

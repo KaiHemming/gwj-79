@@ -15,4 +15,8 @@ public class EndScreen : Control
 		// GetTree().Root.QueueFree();
 		// GetTree().Root.AddChild(newGame);
 	}
+	private void _on_Button2_pressed()
+	{
+		QueueFree();
+	}
 }

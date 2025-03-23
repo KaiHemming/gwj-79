@@ -83,7 +83,7 @@ public class Sprite : Godot.Sprite
 	}
 	// Places a tile at pos
 	public void PlaceTile(Vector2 pos) {
-		if (curTileIndex == -1) return;
+		if (curTileIndex == -1 | bag.Count <= 0) return;
 		if (curTile is Habitat) {
 			if (tileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y) == tileMap.availableTileType) {
 				return;
@@ -115,8 +115,11 @@ public class Sprite : Godot.Sprite
 	public void GetNextTile() {
 		//GD.Print(bag.Count);
 		bag.RemoveAt(curTileIndex);
+		var ui = GetParent().GetNode<UI>("UI");
+
 		if (bag.Count == 0) {
-			curTileIndex = -1;
+			ui.UpdateNumRemaining(bag.Count);
+			ui.UpdateTileName("None");
 			TriggerEndOfGame();
 			return;
 		}
@@ -134,7 +137,6 @@ public class Sprite : Godot.Sprite
 		texture.SetPosition(new Vector2(-75,0));
 		curTile = tile;
 
-		var ui = GetParent().GetNode<UI>("UI");
 		ui.UpdateNumRemaining(bag.Count);
 		ui.UpdateTileName(curTile.name);
 	}
