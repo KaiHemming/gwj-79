@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Drawing;
 
 public class TileHandler
 {
@@ -10,6 +11,27 @@ public class TileHandler
 	public static PackedScene marshScene = GD.Load<PackedScene>("res://scenes/tiles/Marsh.tscn");
 	public static PackedScene wildflowerScene = GD.Load<PackedScene>("res://scenes/tiles/Wildflower.tscn");
 	public static PackedScene habitatScene = GD.Load<PackedScene>("res://scenes/habitats/Habitat.tscn");
+
+	// Tile being placed, Output tile, Land requirements, icon requirements
+	public static Dictionary<Vector2, (Tile, LandRequirement[], IconRequirement[])[]> requirementMapping = new Dictionary<Vector2, (Tile, LandRequirement[], IconRequirement[])[]> {
+		{((Tile)dirtScene.Instance()).atlasCoord, new (Tile, LandRequirement[], IconRequirement[])[]
+			{
+				((Tile)grassScene.Instance(),
+				new LandRequirement[]{ new LandRequirement(waterScene, 1)},
+				new IconRequirement[]{}),
+				((Tile)marshScene.Instance(),
+				new LandRequirement[]{ new LandRequirement(waterScene, 3)},
+				new IconRequirement[]{})
+			}
+		},
+		{((Tile)grassScene.Instance()).atlasCoord, new (Tile, LandRequirement[], IconRequirement[])[]
+			{
+				((Tile)marshScene.Instance(),
+				new LandRequirement[]{ new LandRequirement(waterScene, 3)},
+				new IconRequirement[]{})
+			}
+		},
+	};
 
 	// TODO: Given Habitat atlasCoord (-1,-1), maybe refactor.
 	private static Dictionary<Vector2, PackedScene> tiles = new Dictionary<Vector2, PackedScene>{

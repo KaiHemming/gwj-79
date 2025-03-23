@@ -83,10 +83,74 @@ public class TileMap : Godot.TileMap
 		//GD.Print();
 		return this.WorldToMap(mousePos);
 	}
+
+	public Tile GetBestTile(Vector2 pos, Tile tile) {
+		var neighbouringLand = CountNeighboursOfType(pos);
+		var neighbouringIcons = GetParent().GetNode<IconTileMap>("IconTileMap").CountNeighboursOfType(pos);
+		var bestTile = tile;
+
+		GD.Print("Position: "+ pos + " Tile " + tile.name);
+
+		if (!TileHandler.requirementMapping.ContainsKey(bestTile.atlasCoord)) return tile;
+		var mappings = TileHandler.requirementMapping[bestTile.atlasCoord];
+
+		GD.Print("Found mappings for Position: "+ pos + " Tile " + tile.name);
+
+		// Output tile, Land requirements, icon requirements
+		foreach((Tile, LandRequirement[], IconRequirement[]) tileRequirement in mappings) {
+			Boolean satisfiedLandRequirements = true;
+			Boolean satisfiedIconRequirements = true;
+
+			foreach (LandRequirement landRequirement in tileRequirement.Item2) {
+				if (!neighbouringLand.ContainsKey(landRequirement.atlasCoord)) {
+					satisfiedLandRequirements = false;
+					break;
+				}
+				if (neighbouringLand[landRequirement.atlasCoord] < landRequirement.numRequired) {
+					satisfiedLandRequirements = false;
+					break;
+				}
+			}
+			if (!satisfiedLandRequirements) continue;
+
+			foreach (IconRequirement iconRequirement in tileRequirement.Item3) {
+				if (!neighbouringIcons.ContainsKey(iconRequirement.atlasCoord)) {
+					satisfiedIconRequirements = false;
+					break;
+				}
+				if (neighbouringIcons[iconRequirement.atlasCoord] < iconRequirement.numRequired) {
+					satisfiedIconRequirements = false;
+					break;
+				}
+			}
+			if (!satisfiedIconRequirements) continue;
+
+			GD.Print("Found suitable new tile " + tileRequirement.Item1.name);
+
+			if (tileRequirement.Item1.score > bestTile.score) {
+				GD.Print("Confirmed higher score true");
+				bestTile = tileRequirement.Item1;
+			}
+		}
+		GD.Print("Returning best tile: " + bestTile.name);
+		return bestTile;
+	}
 	// Places a tile at pos
 	public virtual void PlaceTile(Vector2 pos, Tile tile) {
-		HashSet<Vector2> potentialPlacements = new HashSet<Vector2>();
-		
+		GD.Print("\nPlacing " + tile.name);
+		var bestTile = GetBestTile(pos, tile);
+
+		if (!tilesDiscovered.Contains(bestTile.atlasCoord)) {
+			// GD.Print("Tile: " + bestTile.atlasCoord);
+			// PrintTilesDiscovered();
+			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
+			tilesDiscovered.Add(bestTile.atlasCoord);
+		}
+
+		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
+		CheckForHabitat(pos);
+		ui.AddScore(bestTile.score);
+
 		Vector2[] updates;
 		if (pos.x%2 == 0) {
 			updates = sameColNeighbours.Concat(evenRowNeighbours).ToArray();
@@ -94,24 +158,9 @@ public class TileMap : Godot.TileMap
 			updates = sameColNeighbours.Concat(oddRowNeighbours).ToArray();
 		}
 		foreach (Vector2 update in updates) {
-			potentialPlacements.Add(UpdateNeighbour(pos.x+update.x, pos.y+update.y, tile));
+			UpdateNeighbour(pos.x+update.x, pos.y+update.y, bestTile);
 		}
 		
-		var bestTile = tile;
-		foreach (Vector2 potentialPlacement in potentialPlacements) {
-			var potentialTile = (Tile)TileHandler.GetTileScene(potentialPlacement).Instance();
-			if (potentialTile.score > bestTile.score) bestTile = potentialTile;
-		}
-		if (!tilesDiscovered.Contains(bestTile.atlasCoord)) {
-			// GD.Print("Tile: " + bestTile.atlasCoord);
-			// PrintTilesDiscovered();
-			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
-			tilesDiscovered.Add(bestTile.atlasCoord);
-		}
-		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
-		CheckForHabitat(pos);
-		ui.AddScore(bestTile.score);
-		CountNeighboursOfType(pos);
 	}
 	public void PrintTilesDiscovered() {
 		GD.Print("Printing discovered tiles");
@@ -128,26 +177,23 @@ public class TileMap : Godot.TileMap
 		}
 		else {
 			// Check if adjacent tile would change current tile being placed
+			var location = new Vector2((int) x, (int) y);
 			var selectedTileType = GetCellAutotileCoord((int) x, (int) y);
 			if (selectedTileType == availableTileType) return tile.GetAtlasCoord();
-
-			var newTileType = tile.GetUpdatedTile(selectedTileType);
-			var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
-			// TODO: why doesn't this work
-			if (newTileType == selectedTileType) return newTile.GetUpdatedTile(tile.GetAtlasCoord());
-
-			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
-			CheckForHabitat(new Vector2(x, y));
 			
-			if (!tilesDiscovered.Contains(newTile.atlasCoord)) {
-				// GD.Print("Tile: " + newTile.atlasCoord);
-				// PrintTilesDiscovered();
-				GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
-				tilesDiscovered.Add(newTile.atlasCoord);
-			}
 			var selectedTile = (Tile)TileHandler.GetTileScene(selectedTileType).Instance();
-			ui.AddScore(newTile.score - selectedTile.score);
-			return newTile.GetUpdatedTile(tile.GetAtlasCoord());
+
+			var bestTile = GetBestTile(location, selectedTile);
+			if (bestTile.atlasCoord != selectedTileType) {
+				SetCellv(location, 0, false, false, false, bestTile.atlasCoord);
+				ui.AddScore(bestTile.score - selectedTile.score);
+
+				if (!tilesDiscovered.Contains(bestTile.atlasCoord)) {
+					GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
+					tilesDiscovered.Add(bestTile.atlasCoord);
+				}
+				return bestTile.atlasCoord;
+			}
 		}
 		return tile.GetAtlasCoord(); // inefficient
 	}
@@ -162,7 +208,7 @@ public class TileMap : Godot.TileMap
 		}
 		foreach (Vector2 neighbourLocation in neighbourLocations) {
 			var curLocation = new Vector2(location.x+neighbourLocation.x, location.y+neighbourLocation.y);
-			if (IsAvailable(curLocation)) {
+			if (IsEmpty(curLocation)) {
 				continue;
 			}
 			var curAtlasCoord = GetCellAutotileCoord((int) curLocation.x, (int) curLocation.y);
@@ -172,10 +218,10 @@ public class TileMap : Godot.TileMap
 			}
 			countedNeighbours.Add(curAtlasCoord, 1);
 		}
-		// GD.Print("Printing neighbours found");
-		// foreach (KeyValuePair<Vector2, int> countedNeighbour in countedNeighbours) {
-		// 	GD.Print(countedNeighbour);
-		// }
+		GD.Print("Printing neighbours found");
+		foreach (KeyValuePair<Vector2, int> countedNeighbour in countedNeighbours) {
+			GD.Print(countedNeighbour);
+		}
 		return countedNeighbours;
 	}
 	
@@ -183,6 +229,12 @@ public class TileMap : Godot.TileMap
 	public virtual bool IsAvailable(Vector2 pos) {
 		var selectedTileType = GetCellAutotileCoord((int) pos.x, (int) pos.y);
 		if (selectedTileType == availableTileType) {
+			return true;
+		}
+		return false;
+	}
+	public bool IsEmpty(Vector2 pos) {
+		if (GetCell((int) pos.x, (int) pos.y) == TileMap.InvalidCell) {
 			return true;
 		}
 		return false;
