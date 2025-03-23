@@ -12,6 +12,7 @@ public class HabitatHandler
 	public static HarvesterAnts harvesterAnts = new HarvesterAnts();
 	public static BlueButterfly blueButterfly = new BlueButterfly();
 	public static KingFisher kingFisher = new KingFisher();
+	public static Newt newt = new Newt();
 
 
 	// Tuples of habitat, requirements of land, requirements of icons, and required tile to be placed on.
@@ -44,7 +45,11 @@ public class HabitatHandler
 		(kingFisher,
 			new LandRequirement[]{new LandRequirement(TileHandler.waterScene, 1)},
 			new IconRequirement[]{},
-			new Vector2[]{new Vector2(6,0)})
+			new Vector2[]{new Vector2(6,0)}),
+		(newt,
+			new LandRequirement[]{new LandRequirement(TileHandler.marshScene,1), new LandRequirement(TileHandler.grassScene,1)},
+			new IconRequirement[]{},
+			new Vector2[]{new Vector2(2,0)})
 	};
 
 	// converting atlas coordinates to habitats
@@ -56,7 +61,8 @@ public class HabitatHandler
 		{new Vector2(3,0), fish},
 		{new Vector2(5,0), harvesterAnts},
 		{new Vector2(9,0), blueButterfly},
-		{new Vector2(10,0), kingFisher}
+		{new Vector2(10,0), kingFisher},
+		{new Vector2(11,0), newt}
 	};
 
 	public static Habitat GetHabitat(Vector2 atlasCoord) {
