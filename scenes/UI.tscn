@@ -196,6 +196,7 @@ rect_scale = Vector2( 0.3, 0.3 )
 texture_normal = ExtResource( 5 )
 
 [node name="Tutorial" type="WindowDialog" parent="."]
+visible = true
 show_behind_parent = true
 anchor_left = 0.5
 anchor_top = 0.5
@@ -223,12 +224,11 @@ anchor_top = 0.02
 anchor_right = 0.98
 anchor_bottom = 0.98
 custom_fonts/normal_font = SubResource( 7 )
-text = "
-The world is in a dire state. To begin, all that's available to you is dirt and water. Your goal is to create a small paradise of growing life by placing tiles.
+text = "The world is in a dire state. To begin, all that's available to you is dirt and water. Your goal is to create a small paradise of growing life by placing tiles.
 
-The next tile to be placed can be seen in the top right. New tiles and habitats can be found by combining different  formations. Unlock as many tiles as you can. For every tile and habitat you discover, tiles will be added to your bag, from which tiles are pulled.
+The next tile to be placed can be seen in the top right. When you place certain tiles next to each other, you’ll discover new lands and add them to your tile bag. Similarly, habitat tokens can be placed on the board to attract creatures to your tiles. Try different combinations to unlock as many as you can! Once your tile bag is empty, the game ends. 
 
-Different tiles and habitat formations  will produce more or less environmental score. Experiment and try find new ways to develop this land. But be careful, changing lands can scare away the critters.
+Different tiles and habitats produce different numbers of points. Experiment and try to find new ways to develop this land – but be careful, changing lands can scare away the critters.
 
 Place a tile with left-click. 
 Move the map with right-click.
