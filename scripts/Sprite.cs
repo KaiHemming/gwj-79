@@ -23,7 +23,8 @@ public class Sprite : Godot.Sprite
 		new Vector2(2,0),
 		new Vector2(-1,-1),
 		new Vector2(3,0),
-		new Vector2(5,0)
+		new Vector2(5,0),
+		new Vector2(6,0)
 	};
 	
 	// Bag of tiles

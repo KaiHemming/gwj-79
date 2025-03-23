@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/tiles/woods.png" type="Texture" id=1]
+[ext_resource path="res://scripts/tiles/Woods.cs" type="Script" id=2]
+
+[node name="Woods" type="Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+script = ExtResource( 2 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+grow_horizontal = 2
+texture = ExtResource( 1 )

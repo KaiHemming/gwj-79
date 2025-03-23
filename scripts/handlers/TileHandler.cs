@@ -10,6 +10,7 @@ public class TileHandler
 	public static PackedScene waterScene = GD.Load<PackedScene>("res://scenes/tiles/Water.tscn");
 	public static PackedScene marshScene = GD.Load<PackedScene>("res://scenes/tiles/Marsh.tscn");
 	public static PackedScene wildflowerScene = GD.Load<PackedScene>("res://scenes/tiles/Wildflower.tscn");
+	public static PackedScene woodsScene = GD.Load<PackedScene>("res://scenes/tiles/Woods.tscn");
 	public static PackedScene habitatScene = GD.Load<PackedScene>("res://scenes/habitats/Habitat.tscn");
 
 	// Tile being placed, Output tile, Land requirements, icon requirements
@@ -21,6 +22,9 @@ public class TileHandler
 				new IconRequirement[]{}),
 				((Tile)marshScene.Instance(),
 				new LandRequirement[]{ new LandRequirement(waterScene, 3)},
+				new IconRequirement[]{}),
+				((Tile)woodsScene.Instance(),
+				new LandRequirement[] {new LandRequirement(waterScene, 1), new LandRequirement(grassScene,2)},
 				new IconRequirement[]{})
 			}
 		},
@@ -28,7 +32,10 @@ public class TileHandler
 			{
 				((Tile)marshScene.Instance(),
 				new LandRequirement[]{ new LandRequirement(waterScene, 3)},
-				new IconRequirement[]{})
+				new IconRequirement[]{}),
+				((Tile)woodsScene.Instance(),
+				new LandRequirement[] {new LandRequirement(grassScene, 3)},
+				new IconRequirement[]{}),
 			}
 		},
 	};
@@ -40,7 +47,8 @@ public class TileHandler
 		{ new Vector2(2,0), waterScene },
 		{ new Vector2(-1,-1), habitatScene},
 		{ new Vector2(3,0), marshScene},
-		{ new Vector2(5,0), wildflowerScene}
+		{ new Vector2(5,0), wildflowerScene},
+		{ new Vector2(6,0), woodsScene}
 	};
 
 	public static PackedScene GetTileScene(Vector2 atlasCoord) {
