@@ -9,6 +9,9 @@ public class HabitatHandler
 	public static Bee bee = new Bee();
 	public static Dragonfly dragonfly = new Dragonfly();
 	public static Fish fish = new Fish();
+	public static HarvesterAnts harvesterAnts = new HarvesterAnts();
+	public static BlueButterfly blueButterfly = new BlueButterfly();
+	public static KingFisher kingFisher = new KingFisher();
 
 
 	// Tuples of habitat, requirements of land, requirements of icons, and required tile to be placed on.
@@ -29,7 +32,19 @@ public class HabitatHandler
 		(fish, 
 			new LandRequirement[]{},
 			new IconRequirement[]{},
-			new Vector2[]{new Vector2(2,0)})
+			new Vector2[]{new Vector2(2,0)}),
+		(harvesterAnts,
+			new LandRequirement[]{},
+			new IconRequirement[]{},
+			new Vector2[]{new Vector2(6,0)}),
+		(blueButterfly,
+			new LandRequirement[]{},
+			new IconRequirement[]{ new IconRequirement(new Vector2(5,0), 1)},
+			new Vector2[]{new Vector2(5,0)}),
+		(kingFisher,
+			new LandRequirement[]{new LandRequirement(TileHandler.waterScene, 1)},
+			new IconRequirement[]{},
+			new Vector2[]{new Vector2(6,0)})
 	};
 
 	// converting atlas coordinates to habitats
@@ -38,7 +53,10 @@ public class HabitatHandler
 		{new Vector2(0,0), badger},
 		{new Vector2(1,0), bee},
 		{new Vector2(2,0), dragonfly},
-		{new Vector2(3,0), fish}
+		{new Vector2(3,0), fish},
+		{new Vector2(5,0), harvesterAnts},
+		{new Vector2(9,0), blueButterfly},
+		{new Vector2(10,0), kingFisher}
 	};
 
 	public static Habitat GetHabitat(Vector2 atlasCoord) {
