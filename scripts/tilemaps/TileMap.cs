@@ -26,11 +26,13 @@ public class TileMap : Godot.TileMap
 		new Vector2(1,0)
 	};
 	public HashSet<Vector2> tilesDiscovered = new HashSet<Vector2>() {};
+	private UI ui;
 
 	public override void _Ready()
 	{
 		tilesDiscovered.Add(Vector2.Zero); //dirt
 		tilesDiscovered.Add(new Vector2(2,0)); //water
+		ui = GetParent().GetParent().GetNode<UI>("UI");
 	}
 
 	public override void _Process(float delta)
@@ -107,7 +109,8 @@ public class TileMap : Godot.TileMap
 			tilesDiscovered.Add(bestTile.atlasCoord);
 		}
 		SetCellv(pos, 0, false, false, false, bestTile.GetAtlasCoord());
-		score += bestTile.score;
+		CheckForHabitat(pos);
+		ui.AddScore(bestTile.score);
 		CountNeighboursOfType(pos);
 	}
 	public void PrintTilesDiscovered() {
@@ -124,22 +127,26 @@ public class TileMap : Godot.TileMap
 			SetCell((int) x,(int) y, 0, false, false, false, availableTileType);
 		}
 		else {
+			// Check if adjacent tile would change current tile being placed
 			var selectedTileType = GetCellAutotileCoord((int) x, (int) y);
 			if (selectedTileType == availableTileType) return tile.GetAtlasCoord();
-			var selectedTile = (Tile)TileHandler.GetTileScene(selectedTileType).Instance();
-			
+
 			var newTileType = tile.GetUpdatedTile(selectedTileType);
-			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
 			var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
+			// TODO: why doesn't this work
+			if (newTileType == selectedTileType) return newTile.GetUpdatedTile(tile.GetAtlasCoord());
+
+			SetCell((int) x,(int) y, 0, false, false, false, newTileType);
+			CheckForHabitat(new Vector2(x, y));
+			
 			if (!tilesDiscovered.Contains(newTile.atlasCoord)) {
 				// GD.Print("Tile: " + newTile.atlasCoord);
 				// PrintTilesDiscovered();
 				GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
 				tilesDiscovered.Add(newTile.atlasCoord);
 			}
-
-			score += newTile.score - selectedTile.score;
-			// Check if adjacent tile would change current tile being placed
+			var selectedTile = (Tile)TileHandler.GetTileScene(selectedTileType).Instance();
+			ui.AddScore(newTile.score - selectedTile.score);
 			return newTile.GetUpdatedTile(tile.GetAtlasCoord());
 		}
 		return tile.GetAtlasCoord(); // inefficient
@@ -186,5 +193,15 @@ public class TileMap : Godot.TileMap
 			return true;
 		}
 		return false;
+	}
+
+	private void CheckForHabitat(Vector2 pos) {
+		var iconTileMap = GetParent().GetNode<TileMap>("IconTileMap");
+		var cell = iconTileMap.GetCell((int) pos.x, (int) pos.y);
+		if (cell != TileMap.InvalidCell) {
+			var habitat = HabitatHandler.GetHabitat(iconTileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y));
+			GetParent().GetParent().GetNode<UI>("UI").DeductScore(habitat.score);
+			iconTileMap.SetCellv(pos, TileMap.InvalidCell);
+		}
 	}
 }

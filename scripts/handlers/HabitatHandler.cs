@@ -35,10 +35,13 @@ public class HabitatHandler
 	// converting atlas coordinates to habitats
 	// atlas coordinate 
 	private static Dictionary<Vector2, Habitat> habitats = new Dictionary<Vector2,Habitat>{
-		{new Vector2(0,0), fox}
+		{new Vector2(0,0), badger},
+		{new Vector2(1,0), bee},
+		{new Vector2(2,0), dragonfly},
+		{new Vector2(3,0), fish}
 	};
 
-	public static Habitat GetTileScene(Vector2 atlasCoord) {
+	public static Habitat GetHabitat(Vector2 atlasCoord) {
 		return habitats[atlasCoord];
 	}
 }

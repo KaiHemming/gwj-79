@@ -3,8 +3,11 @@ using System;
 
 public class UI : Control
 {
+	private int score = 0;
+	public static PackedScene scoreAdditionScene;
 	public override void _Ready()
 	{
+		scoreAdditionScene = GD.Load<PackedScene>("res://scenes/ScoreAddition.tscn");
 		PopUp();
 	}
 	public void PopUp() {
@@ -22,5 +25,24 @@ public class UI : Control
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
 		GetParent().GetNode<Sprite>("Sprite").paused = false;
 		GetNode<WindowDialog>("Tutorial").Hide();
+	}
+	public void AddScore(int increment) {
+		if (increment == 0) return;
+		this.score += increment;
+		GetNode("HBoxContainer").GetNode<Label>("Score").Text = "" + score;
+		ScoreAddition scoreAddition = (ScoreAddition)scoreAdditionScene.Instance();
+		scoreAddition.SetScoreAddition(increment);
+		GetNode("HBoxContainer").GetNode<VBoxContainer>("ScoreAdditions").AddChild(scoreAddition);
+	}
+	public void DeductScore(int increment) {
+		if (increment == 0) return;
+		this.score -= increment;
+		GetNode("HBoxContainer").GetNode<Label>("Score").Text = "" + score;
+		ScoreAddition scoreAddition = (ScoreAddition)scoreAdditionScene.Instance();
+		scoreAddition.SetScoreReduction(increment);
+		GetNode("HBoxContainer").GetNode<VBoxContainer>("ScoreAdditions").AddChild(scoreAddition);
+	}
+	public int GetScore() {
+		return score;
 	}
 }

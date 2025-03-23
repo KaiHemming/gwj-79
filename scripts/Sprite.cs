@@ -20,7 +20,9 @@ public class Sprite : Godot.Sprite
 		new Vector2(0,0),
 		new Vector2(1,0),
 		new Vector2(2,0),
-		new Vector2(-1,-1)
+		new Vector2(-1,-1),
+		new Vector2(3,0),
+		new Vector2(5,0)
 	};
 	
 	// Bag of tiles
@@ -31,7 +33,6 @@ public class Sprite : Godot.Sprite
 		//Input.MouseMode = Input.MouseModeEnum.Hidden;
 		tileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("TileMap");
 		iconTileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("IconTileMap");
-		scoreLabel = GetParent().GetNode<Control>("UI").GetNode<HBoxContainer>("HBoxContainer").GetNode<Label>("Score");
 		notificationHolder = GetParent().GetNode("UI").GetNode<VBoxContainer>("NotificationHolder");
 		
 		// Starting bag
@@ -43,7 +44,7 @@ public class Sprite : Godot.Sprite
 			bag.Add(0);
 		}
 		// 10 Water
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 15; i++) {
 			bag.Add(2);
 		}
 		// 5 Habitats
@@ -71,8 +72,6 @@ public class Sprite : Godot.Sprite
 		if (inputEvent.IsActionPressed("ui_accept")) {
 			var mousePos = tileMap.GetMousePosition();
 			PlaceTile(mousePos);
-			var score = tileMap.score + iconTileMap.score;
-			scoreLabel.Text = "" + score;
 		}
 		// Check if zoom
 		
@@ -85,6 +84,9 @@ public class Sprite : Godot.Sprite
 				return;
 			}
 			if (tileMap.GetCell((int) pos.x, (int) pos.y) == TileMap.InvalidCell) {
+				return;
+			}
+			if (iconTileMap.GetCell((int) pos.x, (int) pos.y) != TileMap.InvalidCell) {
 				return;
 			}
 			iconTileMap.PlaceTile(pos, curTile);
@@ -141,6 +143,7 @@ public class Sprite : Godot.Sprite
 		if (tile is Habitat) {
 			for (int i = 0; i < tile.discoveryAddition; i++) {
 				bag.Add(HABITAT_INDEX);
+				return;
 			}
 		} else {
 			int indexOfTile = 0;
@@ -150,7 +153,7 @@ public class Sprite : Godot.Sprite
 					break;
 				}
 			}
-			GD.Print("Adding " + tile.discoveryAddition + " " + indexOfTile + "s");
+			GD.Print(tile.name + ", adding " + tile.discoveryAddition + " " + indexOfTile + "s");
 			for (int i = 0; i < tile.discoveryAddition; i++) {
 				bag.Add(indexOfTile);
 			}
@@ -163,6 +166,6 @@ public class Sprite : Godot.Sprite
 		var animationPlayer = endScreen.GetNode<AnimationPlayer>("AnimationPlayer");
 		animationPlayer.Play("FadeIn");
 		endScreen.Visible = true;
-		endScreen.SetScore(tileMap.score + iconTileMap.score);
+		endScreen.SetScore(GetParent().GetNode<UI>("UI").GetScore());
 	}
 }

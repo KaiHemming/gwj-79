@@ -20,11 +20,11 @@ public class Camera2D : Godot.Camera2D
 	}
 	public override void _Input(InputEvent inputEvent) {
 		if (inputEvent.IsActionPressed("zoom_in")) {
-			var newScale = Mathf.Clamp(Scale.x - ZOOM_SPEED, MIN_ZOOM, MAX_ZOOM);
+			var newScale = Mathf.Clamp(Scale.x + ZOOM_SPEED, MIN_ZOOM, MAX_ZOOM);
 			this.Scale = new Vector2(newScale, newScale);
 		}
 		else if (inputEvent.IsActionPressed("zoom_out")) {
-			var newScale = Mathf.Clamp(Scale.x + ZOOM_SPEED, MIN_ZOOM, MAX_ZOOM);
+			var newScale = Mathf.Clamp(Scale.x - ZOOM_SPEED, MIN_ZOOM, MAX_ZOOM);
 			this.Scale = new Vector2(newScale, newScale);
 		}
 	}

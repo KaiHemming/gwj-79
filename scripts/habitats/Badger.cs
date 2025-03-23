@@ -13,8 +13,7 @@ public class Badger : Habitat
 
     public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {
         if (atlasCoord == new Vector2(1,0)) {
-            // TODO: Add to score
-            score++;
+            AddToScore(1);
         }
 		return atlasCoord;
 	}

@@ -7,11 +7,13 @@ using System.Linq;
 public class IconTileMap : TileMap
 {
 	private TileMap tileMap;
+	private UI ui;
 	public int score = 0;
 
 	public override void _Ready()
 	{
 		tileMap = GetParent().GetNode<TileMap>("TileMap");
+		ui = GetParent().GetParent().GetNode<UI>("UI");
 	}
 	public override void PlaceTile(Vector2 pos, Tile tile) {
 		Habitat bestHabitat = new Fox();
@@ -69,7 +71,7 @@ public class IconTileMap : TileMap
 
 		}
 		SetCell((int) pos.x,(int) pos.y, 0, false, false, false, bestHabitat.atlasCoord);
-		score += bestHabitat.score;
+		ui.AddScore(bestHabitat.score);
 		if (!tilesDiscovered.Contains(bestHabitat.atlasCoord)) {
 			// GD.Print("Tile: " + bestHabitat.atlasCoord);
 			// PrintTilesDiscovered();
@@ -95,10 +97,14 @@ public class IconTileMap : TileMap
 		var selectedTileType = tileMap.GetCellAutotileCoord((int) x, (int) y);
 		if (selectedTileType == availableTileType) return Vector2.Zero;
 		
+		tile.Hide();
+		AddChild(tile);
+
 		var newTileType = tile.GetUpdatedTile(selectedTileType);
 		tileMap.SetCell((int) x,(int) y, 0, false, false, false, newTileType);
 		var newTile = (Tile)TileHandler.GetTileScene(newTileType).Instance();
-		score += newTile.score;
+		var selectedTile = (Tile)TileHandler.GetTileScene(selectedTileType).Instance();
+		ui.AddScore(newTile.score - selectedTile.score);
 		if (!tileMap.tilesDiscovered.Contains(newTile.atlasCoord)) {
 			// GD.Print("Tile: " + newTile.atlasCoord);
 			// PrintTilesDiscovered();

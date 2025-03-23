@@ -24,4 +24,9 @@ public class Tile : Control
 	public virtual Vector2 GetUpdatedTile(Vector2 atlasCoord) {
 		return atlasCoord;
 	}
+
+	protected void AddToScore(int addition) {
+		//GetNode<UI>("root/UI").AddScore(addition);
+		GetParent().GetParent().GetParent().GetNode<UI>("UI").AddScore(addition);
+	}
 }

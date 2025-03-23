@@ -107,26 +107,25 @@ margin_bottom = 52.0
 grow_horizontal = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchor_left = 0.5
+anchor_left = 0.01
 anchor_top = 0.01
-anchor_right = 0.5
+anchor_right = 0.01
 anchor_bottom = 0.01
-grow_horizontal = 2
 custom_constants/separation = 30
-alignment = 1
 
 [node name="ScoreLabel" type="Label" parent="HBoxContainer"]
 margin_right = 159.0
 margin_bottom = 48.0
+size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
 text = "Score"
 align = 1
-valign = 1
 
 [node name="Score" type="Label" parent="HBoxContainer"]
 margin_left = 189.0
 margin_right = 222.0
 margin_bottom = 48.0
+size_flags_vertical = 0
 custom_fonts/font = SubResource( 3 )
 text = "0"
 
@@ -134,12 +133,13 @@ text = "0"
 margin_left = 252.0
 margin_right = 252.0
 margin_bottom = 48.0
+custom_constants/separation = 20
 
 [node name="NotificationHolder" type="VBoxContainer" parent="."]
 anchor_left = 0.5
-anchor_top = 0.15
+anchor_top = 0.1
 anchor_right = 0.5
-anchor_bottom = 0.15
+anchor_bottom = 0.1
 margin_right = 40.0
 margin_bottom = 40.0
 custom_constants/separation = 110
@@ -191,7 +191,7 @@ The world is in a dire state. To begin, all that's available to you is dirt and 
 
 The next tile to be placed can be seen in the top right. New tiles and habitats can be found by combining different  formations. Unlock as many tiles as you can. For every tile and habitat you discover, tiles will be added to your bag, from which tiles are pulled.
 
-Different tiles and habitat formations  will produce more or less environmental score. Experiment and try find new ways to develop this land. Goodluck!
+Different tiles and habitat formations  will produce more or less environmental score. Experiment and try find new ways to develop this land. But be careful, changing lands can scare away the critters.
 
 Place a tile with left-click. 
 Move the map with right-click.

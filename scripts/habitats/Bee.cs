@@ -11,9 +11,7 @@ public class Bee : Habitat
 	}
 
     public override Vector2 GetUpdatedTile(Vector2 atlasCoord) {
-        GD.Print(atlasCoord);
         if (atlasCoord == new Vector2(1,0)) {
-            GD.Print("Beep");
             return new Vector2(5,0);
         }
 		return atlasCoord;
