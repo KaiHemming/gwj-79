@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Discovery 3.mp3-fc1fc8e53214c0a651567a9f8323e00a.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/discovery_sounds/Discovery 3.mp3"
+dest_files=[ "res://.import/Discovery 3.mp3-fc1fc8e53214c0a651567a9f8323e00a.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scripts/tilemaps/TileMap.cs" type="Script" id=1]
 [ext_resource path="res://assets/tiles.png" type="Texture" id=2]
@@ -9,6 +9,17 @@
 [ext_resource path="res://assets/hab tiles.png" type="Texture" id=7]
 [ext_resource path="res://scripts/tilemaps/IconTileMap.cs" type="Script" id=8]
 [ext_resource path="res://assets/music/Evenings Ebb and Flow.wav" type="AudioStream" id=9]
+[ext_resource path="res://assets/sounds/Abstract2.wav" type="AudioStream" id=10]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 3.mp3" type="AudioStream" id=11]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 6.mp3" type="AudioStream" id=12]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 7.mp3" type="AudioStream" id=13]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 10.mp3" type="AudioStream" id=14]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 4.mp3" type="AudioStream" id=15]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 9.mp3" type="AudioStream" id=16]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 8.mp3" type="AudioStream" id=17]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 5.mp3" type="AudioStream" id=18]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 1.mp3" type="AudioStream" id=19]
+[ext_resource path="res://assets/sounds/discovery_sounds/Discovery 2.mp3" type="AudioStream" id=20]
 
 [sub_resource type="TileSet" id=1]
 0/name = "tiles.png 0"
@@ -98,3 +109,40 @@ autoplay = true
 texture = ExtResource( 3 )
 centered = false
 script = ExtResource( 4 )
+
+[node name="PlacingTileSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = 15.239
+pitch_scale = 0.6
+
+[node name="DiscoverySounds" type="Node2D" parent="."]
+
+[node name="Discovery1" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 19 )
+
+[node name="Discovery2" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 20 )
+
+[node name="Discovery3" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 11 )
+
+[node name="Discovery4" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 15 )
+
+[node name="Discovery5" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 18 )
+
+[node name="Discovery6" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 12 )
+
+[node name="Discovery7" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 13 )
+
+[node name="Discovery8" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 17 )
+
+[node name="Discovery9" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 16 )
+
+[node name="Discovery10" type="AudioStreamPlayer2D" parent="DiscoverySounds"]
+stream = ExtResource( 14 )

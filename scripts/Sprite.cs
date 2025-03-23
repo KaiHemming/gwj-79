@@ -14,6 +14,7 @@ public class Sprite : Godot.Sprite
 	private static PackedScene tileNotificationScene = GD.Load<PackedScene>("res://scenes/DiscoveredTileNotification.tscn");
 	private static int HABITAT_INDEX = 3;
 	public bool paused = false;
+	private static float TILE_SOUND_PITCH = 0.7f;
 	
 	// Tile collection array
 	private Vector2[] tiles = {
@@ -62,6 +63,10 @@ public class Sprite : Godot.Sprite
 		var texture = curTile.GetNode<TextureRect>("TextureRect");
 		texture.RectScale = new Vector2(0.5f,0.5f);
 		texture.SetPosition(new Vector2(-75,0));
+		
+		var ui = GetParent().GetNode<UI>("UI");
+		ui.UpdateNumRemaining(bag.Count);
+		ui.UpdateTileName(curTile.name);
 	}
 	public override void _Process(float delta) {
 		this.GlobalPosition = GetGlobalMousePosition(); 
@@ -91,11 +96,18 @@ public class Sprite : Godot.Sprite
 			}
 			iconTileMap.PlaceTile(pos, curTile);
 			GetNextTile();
+			var tileSound = GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound");
+			tileSound.PitchScale = rng.RandfRange(TILE_SOUND_PITCH - 0.2f, TILE_SOUND_PITCH + 0.2f);
+			tileSound.Play();
 		}
 		else {
 			if (tileMap.IsAvailable(pos)) {
 				tileMap.PlaceTile(pos, curTile);
 				GetNextTile();
+				GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound").Play();
+				var tileSound = GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound");
+				tileSound.PitchScale = rng.RandfRange(TILE_SOUND_PITCH - 0.2f, TILE_SOUND_PITCH + 0.2f);
+				tileSound.Play();
 			} 
 		}
 	}
@@ -121,10 +133,17 @@ public class Sprite : Godot.Sprite
 		texture.RectScale = new Vector2(0.5f,0.5f);
 		texture.SetPosition(new Vector2(-75,0));
 		curTile = tile;
+
+		var ui = GetParent().GetNode<UI>("UI");
+		ui.UpdateNumRemaining(bag.Count);
+		ui.UpdateTileName(curTile.name);
 	}
 
 	// TODO: tile discovered function in sprite
 	public void tileDiscovered(Tile tile) {
+		var soundToPlay = rng.RandiRange(1,10);
+		GetParent().GetNode("DiscoverySounds").GetNode<AudioStreamPlayer2D>("Discovery" + soundToPlay).Play();
+
 		var notification = (DiscoveredTileNotification)tileNotificationScene.Instance();
 		notification.GetNode<VBoxContainer>("VBoxContainer").GetNode<Label>("Title").Text= tile.discoveryTitle;
 		notification.GetNode<VBoxContainer>("VBoxContainer").GetNode<Label>("Description").Text = tile.discoveryDescription;

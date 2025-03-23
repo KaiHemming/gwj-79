@@ -49,4 +49,10 @@ public class UI : Control
 	{
 		PopUp();
 	}
+	public void UpdateNumRemaining(int bagSize) {
+		GetNode("VBoxContainer").GetNode<Label>("RemainingTiles").Text = bagSize + " remaining";
+	}
+	public void UpdateTileName(String tileName) {
+		GetNode("VBoxContainer").GetNode<Label>("TileName").Text = tileName;
+	}
 }

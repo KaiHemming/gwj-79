@@ -6,7 +6,7 @@ public class Habitat : Tile
 {
 
 	public Habitat() {
-		name = "Token (???)";
+		name = "Habitat Token";
 		atlasCoord = new Vector2(-1,-1);
 		score = 0;
 		discoveryTitle = "A new critter has moved in!";
