@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/UI.cs" type="Script" id=1]
 [ext_resource path="res://assets/fonts/PeaberryDoublespace.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://scenes/EndScreen.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/close window.png" type="Texture" id=4]
+[ext_resource path="res://assets/help.png" type="Texture" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 48
@@ -85,15 +86,15 @@ rect_scale = Vector2( 1.5, 1.5 )
 text = "(0,0)"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchor_left = 0.8
+anchor_left = 0.85
 anchor_top = 0.05
-anchor_right = 0.9
+anchor_right = 0.85
 anchor_bottom = 0.2
 margin_right = 40.0
 margin_bottom = 50.0
 
 [node name="Label" type="Label" parent="VBoxContainer"]
-margin_right = 232.0
+margin_right = 126.0
 margin_bottom = 48.0
 custom_fonts/font = SubResource( 1 )
 text = "Next"
@@ -102,16 +103,16 @@ valign = 1
 
 [node name="CurrentTileTexture" type="Control" parent="VBoxContainer"]
 margin_top = 52.0
-margin_right = 232.0
+margin_right = 126.0
 margin_bottom = 52.0
 grow_horizontal = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchor_left = 0.01
-anchor_top = 0.01
-anchor_right = 0.01
-anchor_bottom = 0.01
-custom_constants/separation = 30
+anchor_left = 0.02
+anchor_top = 0.02
+anchor_right = 0.02
+anchor_bottom = 0.02
+custom_constants/separation = 20
 
 [node name="ScoreLabel" type="Label" parent="HBoxContainer"]
 margin_right = 159.0
@@ -122,16 +123,16 @@ text = "Score"
 align = 1
 
 [node name="Score" type="Label" parent="HBoxContainer"]
-margin_left = 189.0
-margin_right = 222.0
+margin_left = 179.0
+margin_right = 212.0
 margin_bottom = 48.0
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 3 )
 text = "0"
 
 [node name="ScoreAdditions" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 252.0
-margin_right = 252.0
+margin_left = 232.0
+margin_right = 232.0
 margin_bottom = 48.0
 custom_constants/separation = 20
 
@@ -179,6 +180,7 @@ custom_fonts/title_font = SubResource( 8 )
 custom_icons/close = SubResource( 11 )
 custom_styles/panel = SubResource( 6 )
 window_title = "How To Play"
+resizable = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Tutorial"]
 anchor_left = 0.02
@@ -207,4 +209,16 @@ margin_right = -10.0
 margin_bottom = 50.0
 texture_normal = ExtResource( 4 )
 
+[node name="HelpButton" type="TextureButton" parent="."]
+anchor_left = 0.88
+anchor_top = 0.98
+anchor_right = 0.88
+anchor_bottom = 0.98
+margin_top = -152.0
+margin_right = 300.0
+margin_bottom = 40.0
+rect_scale = Vector2( 0.3, 0.3 )
+texture_normal = ExtResource( 5 )
+
 [connection signal="pressed" from="Tutorial/CloseButton" to="." method="_on_CloseButton_pressed"]
+[connection signal="pressed" from="HelpButton" to="." method="_on_HelpButton_pressed"]

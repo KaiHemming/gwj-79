@@ -45,4 +45,8 @@ public class UI : Control
 	public int GetScore() {
 		return score;
 	}
+	private void _on_HelpButton_pressed()
+	{
+		PopUp();
+	}
 }
