@@ -6,7 +6,7 @@ using System.Linq;
 
 public class TileMap : Godot.TileMap
 {
-	private int xDiff = 34; // difference  between x size and x custom transform
+	public int xDiff = 34; // difference  between x size and x custom transform
 	public int score = 0;
 	public Vector2 availableTileType = new Vector2(4,0);
 	protected Vector2[] sameColNeighbours = {
@@ -256,5 +256,12 @@ public class TileMap : Godot.TileMap
 			GetParent().GetParent().GetNode<UI>("UI").DeductScore(habitat.score);
 			iconTileMap.SetCellv(pos, TileMap.InvalidCell);
 		}
+	}
+
+	public Vector2 GetTileGlobalPosition(Vector2 tilePos) {
+		var localPosition = MapToWorld(tilePos);
+		var globalPosition = ToGlobal(localPosition);
+		// globalPosition += CellSize/2;
+		return globalPosition;
 	}
 }

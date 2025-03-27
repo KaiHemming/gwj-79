@@ -7,6 +7,7 @@ public class Grass : Tile
 	public Grass() {
 		name = "Grass";
 		score = 2;
+		discoveryAddition = 20;
 		atlasCoord = new Vector2 (1,0);
 		discoveryTitle = "You discovered grass! +2 points";
 	}

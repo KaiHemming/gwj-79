@@ -23,9 +23,6 @@ public class TileHandler
 				((Tile)marshScene.Instance(),
 				new LandRequirement[]{ new LandRequirement(waterScene, 3)},
 				new IconRequirement[]{}),
-				((Tile)woodsScene.Instance(),
-				new LandRequirement[] {new LandRequirement(waterScene, 1), new LandRequirement(grassScene,2)},
-				new IconRequirement[]{})
 			}
 		},
 		{((Tile)grassScene.Instance()).atlasCoord, new (Tile, LandRequirement[], IconRequirement[])[]
@@ -35,6 +32,9 @@ public class TileHandler
 				new IconRequirement[]{}),
 				((Tile)woodsScene.Instance(),
 				new LandRequirement[] {new LandRequirement(grassScene, 3)},
+				new IconRequirement[]{}),
+				((Tile)woodsScene.Instance(),
+				new LandRequirement[] {new LandRequirement(grassScene, 2), new LandRequirement(woodsScene,1)},
 				new IconRequirement[]{}),
 			}
 		},
