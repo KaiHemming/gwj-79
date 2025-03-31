@@ -1,29 +1,29 @@
 using Godot;
 using System;
 
-public class UI : Control
+public class UI : CanvasLayer
 {
 	private int score = 0;
 	public static PackedScene scoreAdditionScene;
+	private Sprite sprite;
+	
 	public override void _Ready()
 	{
 		scoreAdditionScene = GD.Load<PackedScene>("res://scenes/ScoreAddition.tscn");
+		sprite = GetNode<Sprite>("Sprite");
 		PopUp();
 	}
 	public void PopUp() {
-		GetParent().GetNode<Sprite>("Sprite").paused = true;
-		Input.MouseMode = Input.MouseModeEnum.Visible;
+		sprite.paused = true;
 		GetNode<WindowDialog>("Tutorial").Show();
 	}
 	public override void _Process(float delta) {
 		//GD.Print(GetViewportRect().Size);
-		this.RectSize = GetViewportRect().Size;
 		//GetNode<AcceptDialog>("AcceptDialog").Popup_();
 	}
 	private void _on_CloseButton_pressed()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Hidden;
-		GetParent().GetNode<Sprite>("Sprite").paused = false;
+		sprite.paused = false;
 		GetNode<WindowDialog>("Tutorial").Hide();
 	}
 	public void AddScore(int increment) {

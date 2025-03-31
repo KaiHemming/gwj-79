@@ -27,24 +27,27 @@ public class TileMap : Godot.TileMap
 	};
 	public HashSet<Vector2> tilesDiscovered = new HashSet<Vector2>() {};
 	private UI ui;
+	private Sprite sprite;
+	private Camera2D camera2D;
 
 	public override void _Ready()
 	{
 		tilesDiscovered.Add(Vector2.Zero); //dirt
 		tilesDiscovered.Add(new Vector2(2,0)); //water
-		ui = GetParent().GetParent().GetNode<UI>("UI");
+		ui = GetParent().GetNode<UI>("UI");
+		sprite = ui.GetNode<Sprite>("Sprite");
+		camera2D = GetParent().GetNode<Camera2D>("Camera2D");
 	}
 
 	public override void _Process(float delta)
 	{
 		var pos = GetMousePosition();
-		GetParent().GetParent().GetNode("UI")
-			.GetNode<Label>("Position").Text = 
-				"Pos:" + pos + 
-				" Hovered tile:" + GetCellAutotileCoord((int) pos.x, (int) pos.y) +
-				" Scale: " + GetParent<Camera2D>().Scale +
-				" Cur bag tile: " + GetParent().GetParent().GetNode<Sprite>("Sprite").curTile.GetName() +
-				" Bag size: " + GetParent().GetParent().GetNode<Sprite>("Sprite").bag.Count;
+		// ui.GetNode<Label>("Position").Text = 
+		// 		"Pos:" + pos + 
+		// 		" Hovered tile:" + GetCellAutotileCoord((int) pos.x, (int) pos.y);
+				// " Zoom: " + camera2D.Zoom +
+				// " Cur bag tile: " + sprite.curTile.GetName() +
+				// " Bag size: " + sprite.bag.Count;
 	}
 
 	// https://www.redblobgames.com/grids/hexagons/

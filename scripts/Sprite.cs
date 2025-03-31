@@ -33,9 +33,9 @@ public class Sprite : Godot.Sprite
 	public override void _Ready()
 	{
 		//Input.MouseMode = Input.MouseModeEnum.Hidden;
-		tileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("TileMap");
-		iconTileMap = GetParent().GetNode("Camera2D").GetNode<TileMap>("IconTileMap");
-		notificationHolder = GetParent().GetNode("UI").GetNode<VBoxContainer>("NotificationHolder");
+		tileMap = GetParent().GetParent().GetNode<TileMap>("TileMap");
+		iconTileMap = GetParent().GetParent().GetNode<TileMap>("IconTileMap");
+		notificationHolder = GetParent().GetParent().GetNode("UI").GetNode<VBoxContainer>("NotificationHolder");
 		
 		// Starting bag
 		// One Grass and habitat
@@ -59,13 +59,13 @@ public class Sprite : Godot.Sprite
 		var tileScene = TileHandler.GetTileScene(tiles[0]);
 		curTile = (Tile) tileScene.Instance();
 		curTileIndex = 0;
-		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
+		Control CurrentTileTextureControl = GetParent().GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
 		CurrentTileTextureControl.AddChild(curTile);
 		var texture = curTile.GetNode<TextureRect>("TextureRect");
 		texture.RectScale = new Vector2(0.5f,0.5f);
 		texture.SetPosition(new Vector2(-75,0));
 		
-		var ui = GetParent().GetNode<UI>("UI");
+		var ui = GetParent().GetParent().GetNode<UI>("UI");
 		ui.UpdateNumRemaining(bag.Count);
 		ui.UpdateTileName(curTile.name);
 	}

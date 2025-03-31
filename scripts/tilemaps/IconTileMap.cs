@@ -13,7 +13,7 @@ public class IconTileMap : TileMap
 	public override void _Ready()
 	{
 		tileMap = GetParent().GetNode<TileMap>("TileMap");
-		ui = GetParent().GetParent().GetNode<UI>("UI");
+		ui = GetParent().GetNode<UI>("UI");
 	}
 	public override void PlaceTile(Vector2 pos, Tile tile) {
 		Habitat bestHabitat = new Fox();
