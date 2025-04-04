@@ -40,9 +40,6 @@ public class Sprite : Godot.Sprite
 		notificationHolder = UI.GetNode<VBoxContainer>("NotificationHolder");
 		
 		// Starting bag
-		// One Grass and habitat
-		//bag.Add(0);
-		//bag. Add(3);
 		// 30 Dirt
 		for (int i = 0; i < 30; i++) {
 			bag.Add(0);
@@ -187,6 +184,6 @@ public class Sprite : Godot.Sprite
 		var animationPlayer = endScreen.GetNode<AnimationPlayer>("AnimationPlayer");
 		animationPlayer.Play("FadeIn");
 		endScreen.Visible = true;
-		endScreen.SetScore(GetParent().GetNode<UI>("UI").GetScore());
+		endScreen.SetScore(UI.GetScore());
 	}
 }

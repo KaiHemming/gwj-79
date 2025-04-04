@@ -8,11 +8,8 @@ public class EndScreen : Control
 	}
 	private void _on_Button_pressed()
 	{
-		// if(!Visible) return;
-		// GetTree().ReloadCurrentScene();
-
-		// var newGame = GD.Load<PackedScene>("res://scenes/Main.tscn").Instance();
-		// GetTree().Root.QueueFree();
-		// GetTree().Root.AddChild(newGame);
+		if(!Visible) return;
+		var newGame = GD.Load<PackedScene>("res://scenes/Main.tscn");
+		GetTree().ChangeSceneTo(newGame);
 	}
 }
