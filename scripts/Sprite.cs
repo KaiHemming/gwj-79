@@ -15,6 +15,7 @@ public class Sprite : Godot.Sprite
 	private static int HABITAT_INDEX = 3;
 	public bool paused = false;
 	private static float TILE_SOUND_PITCH = 0.7f;
+	private static UI UI;
 	
 	// Tile collection array
 	private Vector2[] tiles = {
@@ -35,7 +36,8 @@ public class Sprite : Godot.Sprite
 		//Input.MouseMode = Input.MouseModeEnum.Hidden;
 		tileMap = GetParent().GetParent().GetNode<TileMap>("TileMap");
 		iconTileMap = GetParent().GetParent().GetNode<TileMap>("IconTileMap");
-		notificationHolder = GetParent().GetParent().GetNode("UI").GetNode<VBoxContainer>("NotificationHolder");
+		UI = (UI)GetParent().GetParent().GetNode("UI");
+		notificationHolder = UI.GetNode<VBoxContainer>("NotificationHolder");
 		
 		// Starting bag
 		// One Grass and habitat
@@ -59,7 +61,7 @@ public class Sprite : Godot.Sprite
 		var tileScene = TileHandler.GetTileScene(tiles[0]);
 		curTile = (Tile) tileScene.Instance();
 		curTileIndex = 0;
-		Control CurrentTileTextureControl = GetParent().GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
+		Control CurrentTileTextureControl = UI.GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
 		CurrentTileTextureControl.AddChild(curTile);
 		var texture = curTile.GetNode<TextureRect>("TextureRect");
 		texture.RectScale = new Vector2(0.5f,0.5f);
@@ -105,8 +107,8 @@ public class Sprite : Godot.Sprite
 			if (tileMap.IsAvailable(pos)) {
 				tileMap.PlaceTile(pos, curTile);
 				GetNextTile();
-				GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound").Play();
-				var tileSound = GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound");
+				GetParent().GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound").Play();
+				var tileSound = GetParent().GetParent().GetNode<AudioStreamPlayer>("PlacingTileSound");
 				tileSound.PitchScale = rng.RandfRange(TILE_SOUND_PITCH - 0.2f, TILE_SOUND_PITCH + 0.2f);
 				tileSound.Play();
 			} 
@@ -123,7 +125,7 @@ public class Sprite : Godot.Sprite
 		}
 		curTileIndex = rng.RandiRange(0, bag.Count-1);
 		Vector2 tileAtlas = tiles[(int) bag[curTileIndex]];
-		Control CurrentTileTextureControl = GetParent().GetNode("UI").GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
+		Control CurrentTileTextureControl = UI.GetNode<VBoxContainer>("VBoxContainer").GetNode<Control>("CurrentTileTexture");
 		foreach (Node i in CurrentTileTextureControl.GetChildren()) {
 			i.QueueFree();
 		}
@@ -135,15 +137,14 @@ public class Sprite : Godot.Sprite
 		texture.SetPosition(new Vector2(-75,0));
 		curTile = tile;
 
-		var ui = GetParent().GetNode<UI>("UI");
-		ui.UpdateNumRemaining(bag.Count);
-		ui.UpdateTileName(curTile.name);
+		UI.UpdateNumRemaining(bag.Count);
+		UI.UpdateTileName(curTile.name);
 	}
 
 	// TODO: tile discovered function in sprite
 	public void tileDiscovered(Tile tile) {
 		var soundToPlay = rng.RandiRange(1,10);
-		GetParent().GetNode("DiscoverySounds").GetNode<AudioStreamPlayer2D>("Discovery" + soundToPlay).Play();
+		GetParent().GetParent().GetNode("DiscoverySounds").GetNode<AudioStreamPlayer2D>("Discovery" + soundToPlay).Play();
 
 		var notification = (DiscoveredTileNotification)tileNotificationScene.Instance();
 		notification.GetNode<VBoxContainer>("VBoxContainer").GetNode<Label>("Title").Text= tile.discoveryTitle;
@@ -182,7 +183,7 @@ public class Sprite : Godot.Sprite
 
 	// TODO: Trigger end of game
 	public void TriggerEndOfGame() {
-		var endScreen = GetParent().GetNode("UI").GetNode<EndScreen>("EndScreen");
+		var endScreen = UI.GetNode<EndScreen>("EndScreen");
 		var animationPlayer = endScreen.GetNode<AnimationPlayer>("AnimationPlayer");
 		animationPlayer.Play("FadeIn");
 		endScreen.Visible = true;

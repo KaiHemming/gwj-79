@@ -193,7 +193,7 @@ public class TileMap : Godot.TileMap
 				ui.AddScore(bestTile.score - selectedTile.score);
 
 				if (!tilesDiscovered.Contains(bestTile.atlasCoord)) {
-					GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
+					ui.GetNode<Sprite>("Sprite").tileDiscovered(bestTile);
 					tilesDiscovered.Add(bestTile.atlasCoord);
 				}
 				return bestTile.atlasCoord;

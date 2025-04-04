@@ -94,8 +94,6 @@ script = ExtResource( 8 )
 scale = Vector2( 2.5, 2.5 )
 anchor_mode = 0
 current = true
-smoothing_enabled = true
-smoothing_speed = 30.0
 script = ExtResource( 5 )
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

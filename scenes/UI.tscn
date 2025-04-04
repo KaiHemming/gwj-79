@@ -244,7 +244,6 @@ margin_bottom = 50.0
 texture_normal = ExtResource( 4 )
 
 [node name="Sprite" type="Sprite" parent="."]
-scale = Vector2( 1, 1 )
 texture = ExtResource( 6 )
 centered = false
 script = ExtResource( 7 )
