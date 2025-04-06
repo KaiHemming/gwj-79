@@ -41,7 +41,7 @@ public class TileHandler
 	};
 
 	// TODO: Given Habitat atlasCoord (-1,-1), maybe refactor.
-	private static Dictionary<Vector2, PackedScene> tiles = new Dictionary<Vector2, PackedScene>{
+	public static Dictionary<Vector2, PackedScene> tiles = new Dictionary<Vector2, PackedScene>{
 		{ new Vector2(1,0), grassScene },
 		{ new Vector2(0,0), dirtScene },
 		{ new Vector2(2,0), waterScene },

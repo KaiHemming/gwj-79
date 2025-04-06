@@ -75,7 +75,7 @@ public class IconTileMap : TileMap
 		if (!tilesDiscovered.Contains(bestHabitat.atlasCoord)) {
 			// GD.Print("Tile: " + bestHabitat.atlasCoord);
 			// PrintTilesDiscovered();
-			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(bestHabitat);
+			ui.GetNode<Sprite>("Sprite").tileDiscovered(bestHabitat);
 			tilesDiscovered.Add(bestHabitat.atlasCoord);
 		}
 		
@@ -108,7 +108,7 @@ public class IconTileMap : TileMap
 		if (!tileMap.tilesDiscovered.Contains(newTile.atlasCoord)) {
 			// GD.Print("Tile: " + newTile.atlasCoord);
 			// PrintTilesDiscovered();
-			GetParent().GetParent().GetNode<Sprite>("Sprite").tileDiscovered(newTile);
+			ui.GetNode<Sprite>("Sprite").tileDiscovered(newTile);
 			tileMap.tilesDiscovered.Add(newTile.atlasCoord);
 		}
 

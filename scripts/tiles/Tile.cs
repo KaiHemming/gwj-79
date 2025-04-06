@@ -27,6 +27,6 @@ public class Tile : Control
 
 	protected void AddToScore(int addition) {
 		//GetNode<UI>("root/UI").AddScore(addition);
-		GetParent().GetParent().GetParent().GetNode<UI>("UI").AddScore(addition);
+		GetTree().Root.GetNode("Main").GetNode<UI>("UI").AddScore(addition);
 	}
 }

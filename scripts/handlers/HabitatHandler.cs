@@ -13,12 +13,15 @@ public class HabitatHandler
 	public static BlueButterfly blueButterfly = new BlueButterfly();
 	public static KingFisher kingFisher = new KingFisher();
 	public static Newt newt = new Newt();
+	public static Worm worm = new Worm();
+	public static GreenTigerBeetle greenTigerBeetle = new GreenTigerBeetle();
+	public static SmallWhiteButterfly smallWhiteButterfly = new SmallWhiteButterfly();
 
 
 	// Tuples of habitat, requirements of land, requirements of icons, and required tile to be placed on.
 	public static (Habitat, LandRequirement[], IconRequirement[], Vector2[])[] requirementMapping = {
 		( badger, 
-			new LandRequirement[]{}, 
+			new LandRequirement[]{new LandRequirement(TileHandler.grassScene,1)}, 
 			new IconRequirement[]{}, 
 			new Vector2[]{new Vector2(0,0)}
 		),
@@ -44,17 +47,33 @@ public class HabitatHandler
 			new Vector2[]{new Vector2(5,0)}),
 		(kingFisher,
 			new LandRequirement[]{new LandRequirement(TileHandler.waterScene, 1)},
-			new IconRequirement[]{},
+			new IconRequirement[]{new IconRequirement(fish.atlasCoord,1)},
 			new Vector2[]{new Vector2(6,0)}),
 		(newt,
 			new LandRequirement[]{new LandRequirement(TileHandler.marshScene,1), new LandRequirement(TileHandler.grassScene,1)},
 			new IconRequirement[]{},
-			new Vector2[]{new Vector2(2,0)})
+			new Vector2[]{new Vector2(2,0)}),
+		(worm, 
+			new LandRequirement[]{},
+			new IconRequirement[]{},
+			new Vector2[]{new Vector2(0,0)}),
+		(smallWhiteButterfly,
+			new LandRequirement[]{},
+			new IconRequirement[]{},
+			new Vector2[]{new Vector2(5,0)}),
+		(greenTigerBeetle,
+			new LandRequirement[]{},
+			new IconRequirement[]{new IconRequirement(blueButterfly.atlasCoord, 1)},
+			new Vector2[]{new Vector2(1,0), new Vector2(5,0)}),
+		(greenTigerBeetle,
+			new LandRequirement[]{},
+			new IconRequirement[]{new IconRequirement(smallWhiteButterfly.atlasCoord, 1)},
+			new Vector2[]{new Vector2(1,0), new Vector2(5,0)})
 	};
 
 	// converting atlas coordinates to habitats
 	// atlas coordinate 
-	private static Dictionary<Vector2, Habitat> habitats = new Dictionary<Vector2,Habitat>{
+	public static Dictionary<Vector2, Habitat> habitats = new Dictionary<Vector2,Habitat>{
 		{new Vector2(0,0), badger},
 		{new Vector2(1,0), bee},
 		{new Vector2(2,0), dragonfly},

@@ -50,40 +50,15 @@ public class TileMap : Godot.TileMap
 				// " Bag size: " + sprite.bag.Count;
 	}
 
-	// https://www.redblobgames.com/grids/hexagons/
-	//function axial_to_oddq(hex):
-		//var col = hex.q
-		//var row = hex.r + (hex.q - (hex.q&1)) / 2
-		//return OffsetCoord(col, row)
-
-	//function oddq_to_axial(hex):
-		//var q = hex.col
-		//var r = hex.row - (hex.col - (hex.col&1)) / 2
-		//return Hex(q, r)
-
 	public Vector2 GetMousePosition() {
 		var mousePos = GetLocalMousePosition();
-		//GD.Print("mousePos " + mousePos);
 		
 		var squareY = (mousePos.y-xDiff)/CellSize.x;
 		var squareX = mousePos.x/CellSize.y;
-		//GD.Print("squareX " + squareX);
-		//GD.Print("squareY " + squareY);
-		//GD.Print("col odd/even " + Math.Floor(squareX%2));
-		
-		// if (Math.Floor(squareX%2) == 0) {
-		// 	mousePos.y = mousePos.y - (CellSize.y+xDiff)/2;
-		// } else {
-		// 	mousePos.y = mousePos.y - CellSize.y+xDiff;
-		// }
-		
-		//mousePos.x = mousePos.x + CellSize.x/4; // TODO: This is innacurate
 
 		mousePos.y -= 45;
 		mousePos.x -= xDiff;
-		
-		//GD.Print("mousePos after" + mousePos);
-		//GD.Print();
+
 		return this.WorldToMap(mousePos);
 	}
 
@@ -256,7 +231,7 @@ public class TileMap : Godot.TileMap
 		var cell = iconTileMap.GetCell((int) pos.x, (int) pos.y);
 		if (cell != TileMap.InvalidCell) {
 			var habitat = HabitatHandler.GetHabitat(iconTileMap.GetCellAutotileCoord((int) pos.x, (int) pos.y));
-			GetParent().GetParent().GetNode<UI>("UI").DeductScore(habitat.score);
+			ui.DeductScore(habitat.score);
 			iconTileMap.SetCellv(pos, TileMap.InvalidCell);
 		}
 	}
@@ -264,7 +239,11 @@ public class TileMap : Godot.TileMap
 	public Vector2 GetTileGlobalPosition(Vector2 tilePos) {
 		var localPosition = MapToWorld(tilePos);
 		var globalPosition = ToGlobal(localPosition);
-		// globalPosition += CellSize/2;
 		return globalPosition;
 	}
+
+	// public void setCell(int x, int y, int tileType) {
+	// 	SetCell(x, y, tileType);
+	// 	GetCell(x, y).
+	// }
 }

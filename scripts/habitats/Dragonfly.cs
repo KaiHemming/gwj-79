@@ -7,6 +7,7 @@ public class Dragonfly : Habitat
 		atlasCoord = new Vector2(2,0);
 		name = "Dragonfly";
         score = 3;
-		discoveryTitle = "A Dragonfly has moved in! +3 points";
+		discoveryAddition = 1;
+		discoveryTitle = "A Dragonfly has moved in! +3 points +1 habitat token";
 	}
 }

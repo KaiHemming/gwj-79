@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="GWJ-79-godotv3"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="res://scenes/TitleScreen.tscn"
 config/icon="res://icon.png"
 
 [display]
@@ -24,6 +24,8 @@ window/stretch/aspect="expand"
 [global]
 
 background=false
+scene=false
+main=false
 
 [gui]
 

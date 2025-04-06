@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://scripts/UI.cs" type="Script" id=1]
 [ext_resource path="res://assets/fonts/PeaberryDoublespace.ttf" type="DynamicFontData" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/help.png" type="Texture" id=5]
 [ext_resource path="res://assets/hand_point.png" type="Texture" id=6]
 [ext_resource path="res://scripts/Sprite.cs" type="Script" id=7]
+[ext_resource path="res://scenes/Encyclopedia.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 48
@@ -170,6 +171,7 @@ margin_bottom = 40.0
 custom_constants/separation = 110
 
 [node name="EndScreen" parent="." instance=ExtResource( 3 )]
+visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_left = 0.5
 anchor_top = 0.5
@@ -242,6 +244,9 @@ anchor_bottom = 0.05
 margin_right = -10.0
 margin_bottom = 50.0
 texture_normal = ExtResource( 4 )
+
+[node name="Encyclopedia" parent="." instance=ExtResource( 8 )]
+visible = false
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 6 )
