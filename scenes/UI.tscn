@@ -246,7 +246,6 @@ margin_bottom = 50.0
 texture_normal = ExtResource( 4 )
 
 [node name="Encyclopedia" parent="." instance=ExtResource( 8 )]
-visible = false
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 6 )

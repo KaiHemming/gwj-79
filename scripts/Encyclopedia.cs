@@ -16,7 +16,7 @@ public class Encyclopedia : CanvasLayer
 	public static Texture HABITATS_ATLAS_SOURCE = (Texture)GD.Load("res://assets/hab tiles.png");
 	public override void _Ready()
 	{
-		iconsContainer = GetNode<HFlowContainer>("IconsContainer");
+		iconsContainer = GetNode("ScrollContainer").GetNode<HFlowContainer>("IconsContainer");
 		colorRect = GetNode<ColorRect>("ColorRect");
 		tileSet = GetTree().Root.GetNode("Main").GetNode<TileMap>("TileMap").TileSet;
 		iconTileSet = GetTree().Root.GetNode("Main").GetNode<TileMap>("IconTileMap").TileSet;
@@ -36,14 +36,22 @@ public class Encyclopedia : CanvasLayer
 	{
 		// Habitats
 		foreach (KeyValuePair<Vector2, Habitat> habitat in HabitatHandler.habitats) {
-
+			TextureRect rect = new TextureRect();
+			rect.Texture = ImageFromAtlas(true, habitat.Key);
+			iconsContainer.AddChild(rect);
+			GD.Print("Added habitat " + habitat.Key);
 		}
 		foreach(KeyValuePair<Vector2, PackedScene> tile in TileHandler.tiles) {
 			if (tile.Key == new Vector2(-1,-1)) continue;
+			TextureRect rect = new TextureRect();
+			rect.Texture = ImageFromAtlas(false, tile.Key);
+			// rect.Modulate = rgba(252525);
+			iconsContainer.AddChild(rect);
+			GD.Print("Added tile " + tile.Key):
 		}
 	}
 
-	private void ImageFromAtlas(Boolean isIconMap, Vector2 atlasCoord) {
+	private ImageTexture ImageFromAtlas(Boolean isIconMap, Vector2 atlasCoord) {
 		Texture atlasTexture;
 		if (isIconMap) {
 			atlasTexture = HABITATS_ATLAS_SOURCE;
@@ -61,11 +69,13 @@ public class Encyclopedia : CanvasLayer
 			atlasCoord.y * (TILE_SIZE + ATLAS_SOURCE_SPACING)
 		);
 
+		ImageTexture texture = new ImageTexture();
 		Image tileImage = new Image();
 		tileImage.Create(TILE_SIZE, TILE_SIZE, false, atlasImage.GetFormat());
 		tileImage.BlitRect(atlasImage, new Rect2(pixelPosition, new Vector2(TILE_SIZE, TILE_SIZE)), Vector2.Zero);
 		tileImage.Unlock();
-
+		texture.CreateFromImage(tileImage);
+		return texture;
 		
 	}
 }
