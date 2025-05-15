@@ -73,7 +73,7 @@ public class HabitatHandler
 
 	// converting atlas coordinates to habitats
 	// atlas coordinate 
-	public static Dictionary<Vector2, Habitat> habitats = new Dictionary<Vector2,Habitat>{
+	public static Dictionary<Vector2, Habitat> habitats = new Dictionary<Vector2, Habitat>{
 		{new Vector2(0,0), badger},
 		{new Vector2(1,0), bee},
 		{new Vector2(2,0), dragonfly},
@@ -81,7 +81,10 @@ public class HabitatHandler
 		{new Vector2(5,0), harvesterAnts},
 		{new Vector2(9,0), blueButterfly},
 		{new Vector2(10,0), kingFisher},
-		{new Vector2(11,0), newt}
+		{new Vector2(11,0), newt},
+		{new Vector2(7,0), worm},
+		{new Vector2(8,0), smallWhiteButterfly},
+		{new Vector2(6,0), greenTigerBeetle}
 	};
 
 	public static Habitat GetHabitat(Vector2 atlasCoord) {

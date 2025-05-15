@@ -1,4 +1,6 @@
-[gd_resource type="Theme" load_steps=4 format=2]
+[gd_resource type="Theme" load_steps=6 format=2]
+
+[ext_resource path="res://assets/fonts/PeaberryDoublespace.ttf" type="DynamicFontData" id=1]
 
 [sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 0.0431373, 0.352941, 0.541176, 1 )
@@ -14,11 +16,21 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="DynamicFont" id=8]
+size = 64
+font_data = ExtResource( 1 )
+
 [sub_resource type="StyleBoxFlat" id=7]
+corner_radius_top_left = 20
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 20
 
 [resource]
+Button/fonts/Default = null
 Button/styles/hover = SubResource( 5 )
 Button/styles/normal = SubResource( 6 )
 HFlowContainer/constants/hseparation = 4
 HFlowContainer/constants/vseparation = 4
+ScrollContainer/fonts/Default = SubResource( 8 )
 ScrollContainer/styles/bg = SubResource( 7 )
